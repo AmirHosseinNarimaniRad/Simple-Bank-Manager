@@ -37,7 +37,7 @@ namespace Programing
                 Console.Write("Choose an option: ");
                 string input = Console.ReadLine();
 
-                if (!int.TryParse(input, out int choice))/////
+                if (!int.TryParse(input, out int choice))
                 {
                     Console.WriteLine("Invalid input. Try again.");
                     continue;
