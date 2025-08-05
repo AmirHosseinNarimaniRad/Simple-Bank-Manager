@@ -17,11 +17,11 @@ namespace Programing
 
                 if (currentAccount != null)
                 {
-                    Console.WriteLine($"👉 Current account selected: ID {currentAccount.Id}");
+                    Console.WriteLine($"Current account selected: ID {currentAccount.Id}");
                 }
                 else
                 {
-                    Console.WriteLine("⚠️  No account selected.");
+                    Console.WriteLine("No account selected.");
                 }
 
 
@@ -34,15 +34,18 @@ namespace Programing
                 Console.WriteLine("6. View balance");
                 Console.WriteLine("7. Exit");
 
+
                 Console.Write("Choose an option: ");
                 string input = Console.ReadLine();
 
                 if (!int.TryParse(input, out int choice))
                 {
                     Console.WriteLine("Invalid input. Try again.");
-                    continue;
 
                     Console.ReadLine();
+                    continue;
+
+                    
                 }
 
                 if (choice == 1)
@@ -54,7 +57,7 @@ namespace Programing
                     accounts.Add(newAccount);
                     currentAccount = newAccount;
 
-                    Console.WriteLine($"✅ Account '{newAccount.Name}' created with ID: {newAccount.Id}");
+                    Console.WriteLine($" Account '{newAccount.Name}' created with ID: {newAccount.Id}");
 
                     Console.ReadLine();
 

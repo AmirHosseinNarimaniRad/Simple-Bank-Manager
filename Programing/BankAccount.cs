@@ -36,6 +36,8 @@ namespace Programing
                 Console.WriteLine("Amount must be greater than zero.");
             }
         }
+
+
         public void Withdraw(decimal Amount)
         {
 
@@ -53,6 +55,7 @@ namespace Programing
                 Console.WriteLine("Withdraw successful. ");
             }
         }
+
 
         public decimal GetBalance()
         {
