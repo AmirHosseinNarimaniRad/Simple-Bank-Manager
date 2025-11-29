@@ -15,16 +15,11 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		// Check if user is logged in
-		bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
-		
-		if (isLoggedIn)
+		// Use NavigationPage instead of Shell to avoid XAML issues
+		return new Window(new NavigationPage(new Views.MainPage())
 		{
-			return new Window(new AppShell());
-		}
-		else
-		{
-			return new Window(new NavigationPage(new LoginPage()));
-		}
+			BarBackgroundColor = Color.FromArgb("#512BD4"),
+			BarTextColor = Colors.White
+		});
 	}
 }

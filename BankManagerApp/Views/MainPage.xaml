@@ -2,51 +2,80 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BankManagerApp.Views.MainPage"
-             Title="My Accounts"
-             FlowDirection="LeftToRight">
+             FlowDirection="RightToLeft"
+             BackgroundColor="#F8F9FA"
+             Title="نمکدون">
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
         
-        <!-- Header -->
-        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
-                <Label x:Name="WelcomeLabel"
-                       Text="Welcome" 
-                       FontSize="24" 
-                       FontAttributes="Bold"
-                       VerticalOptions="Center"
-                       HorizontalOptions="StartAndExpand"/>
+            <!-- Header -->
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label x:Name="WelcomeLabel" 
+                           Text="سلام، کاربر عزیز" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="#333"/>
+                    <Label Text="مدیریت هوشمند مخارج شما" 
+                           FontSize="14" 
+                           TextColor="#666"/>
+                </VerticalStackLayout>
                 
-                <Button Text="Logout"
+                <Button Grid.Column="1" 
+                        Text="خروج"
                         Clicked="OnLogoutClicked"
-                        BackgroundColor="{StaticResource Gray300}"
-                        TextColor="{StaticResource Gray900}"
-                        FontSize="14"
+                        BackgroundColor="#FFEBEE"
+                        TextColor="#C62828"
+                        CornerRadius="8"
                         Padding="15,8"
-                        CornerRadius="10"/>
-            </HorizontalStackLayout>
-            
-            <Label Text="Your Bank Accounts" 
-                   FontSize="18" 
-                   FontAttributes="Bold"
-                   Margin="0,10,0,0"/>
+                        FontSize="14"
+                        HorizontalOptions="End"/>
+            </Grid>
+
+            <!-- Summary Cards -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                <Border Grid.Column="0" StrokeShape="RoundRectangle 15" BackgroundColor="#E8F5E9" StrokeThickness="0" Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="موجودی کل" FontSize="12" TextColor="#2E7D32"/>
+                        <Label x:Name="TotalBalanceLabel" Text="0 تومان" FontSize="20" FontAttributes="Bold" TextColor="#2E7D32"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" StrokeShape="RoundRectangle 15" BackgroundColor="#E3F2FD" StrokeThickness="0" Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="بودجه باقی‌مانده" FontSize="12" TextColor="#1976D2"/>
+                        <Label x:Name="BudgetLabel" Text="0 تومان" FontSize="20" FontAttributes="Bold" TextColor="#1976D2"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Date -->
+            <Border StrokeShape="RoundRectangle 15" BackgroundColor="White" StrokeThickness="0" Padding="10">
+                <Label x:Name="DateLabel" Text="📅 امروز" VerticalOptions="Center" TextColor="#333" FontAttributes="Bold"/>
+            </Border>
+
+            <!-- Wallets Header -->
+            <Label Text="کیف پول‌های من" FontSize="18" FontAttributes="Bold" TextColor="#333"/>
+
+            <!-- Simple Wallet List (No CollectionView) -->
+            <VerticalStackLayout x:Name="WalletsContainer" Spacing="10">
+                <Label Text="هنوز کیف پولی ساخته نشده است" 
+                       TextColor="#888" 
+                       HorizontalOptions="Center"
+                       Margin="0,20,0,20"/>
+            </VerticalStackLayout>
+
+            <!-- Create Wallet Button -->
+            <Button Text="+ ساخت کیف پول جدید"
+                    Clicked="OnCreateAccountClicked"
+                    BackgroundColor="#512BD4"
+                    TextColor="White"
+                    CornerRadius="15"
+                    Padding="15"
+                    FontSize="16"
+                    FontAttributes="Bold"/>
+
         </VerticalStackLayout>
-
-        <!-- Accounts List -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout x:Name="AccountsList" Spacing="15"/>
-        </ScrollView>
-
-        <!-- Create Account Button -->
-        <Button Grid.Row="2"
-                Text="➕ Create New Account"
-                Clicked="OnCreateAccountClicked"
-                FontSize="18"
-                FontAttributes="Bold"
-                Padding="15"
-                CornerRadius="15"
-                BackgroundColor="{StaticResource Primary}"
-                TextColor="White"
-                Margin="0,20,0,0"/>
-    </Grid>
+    </ScrollView>
 </ContentPage>

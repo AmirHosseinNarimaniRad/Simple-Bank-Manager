@@ -17,6 +17,7 @@ namespace BankManagerApp.Models
         [MaxLength(15), Unique, NotNull]
         public string PhoneNumber { get; set; } = string.Empty;
 
+        public decimal MonthlyBudget { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Ignore]

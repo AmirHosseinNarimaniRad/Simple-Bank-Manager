@@ -3,120 +3,128 @@ using BankManagerApp.Models;
 
 namespace BankManagerApp.Services
 {
+    public static class Constants
+    {
+        public const string DatabaseFilename = "namakdoon.db3";
+
+        public const SQLite.SQLiteOpenFlags Flags =
+            SQLite.SQLiteOpenFlags.ReadWrite |
+            SQLite.SQLiteOpenFlags.Create |
+            SQLite.SQLiteOpenFlags.SharedCache;
+
+        public static string DatabasePath =>
+            Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+    }
+
     public class DatabaseService
     {
-        private readonly SQLiteAsyncConnection _database;
+        private SQLiteAsyncConnection _database;
 
         public DatabaseService()
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "bankmanager.db3");
-            _database = new SQLiteAsyncConnection(dbPath);
-            
-            // Create tables
-            _database.CreateTableAsync<User>().Wait();
-            _database.CreateTableAsync<BankAccountDb>().Wait();
-            _database.CreateTableAsync<TransactionDb>().Wait();
         }
 
-        // User Operations
-        public Task<List<User>> GetUsersAsync()
+        public async Task Init()
         {
-            return _database.Table<User>().ToListAsync();
+            if (_database is not null)
+                return;
+
+            _database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+            var result = await _database.CreateTablesAsync<User, Wallet, TransactionDb>();
         }
 
-        public Task<User> GetUserByPhoneAsync(string phoneNumber)
+        // User methods
+        public async Task<List<User>> GetUsersAsync()
         {
-            return _database.Table<User>()
-                .Where(u => u.PhoneNumber == phoneNumber)
-                .FirstOrDefaultAsync();
+            await Init();
+            return await _database.Table<User>().ToListAsync();
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByPhoneAsync(string phoneNumber)
         {
-            return _database.Table<User>()
-                .Where(u => u.Id == id)
-                .FirstOrDefaultAsync();
+            await Init();
+            return await _database.Table<User>().Where(u => u.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveUserAsync(User user)
+        public async Task<User> GetUserByIdAsync(int id)
         {
+            await Init();
+            return await _database.Table<User>().Where(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> SaveUserAsync(User user)
+        {
+            await Init();
             if (user.Id != 0)
-            {
-                return _database.UpdateAsync(user);
-            }
+                return await _database.UpdateAsync(user);
             else
-            {
-                return _database.InsertAsync(user);
-            }
+                return await _database.InsertAsync(user);
         }
 
-        public Task<int> DeleteUserAsync(User user)
+        public async Task<int> DeleteUserAsync(User user)
         {
-            return _database.DeleteAsync(user);
+            await Init();
+            return await _database.DeleteAsync(user);
         }
 
-        // BankAccount Operations
-        public Task<List<BankAccountDb>> GetAccountsAsync(int userId)
+        // Wallet methods
+        public async Task<List<Wallet>> GetWalletsAsync(int userId)
         {
-            return _database.Table<BankAccountDb>()
+            await Init();
+            return await _database.Table<Wallet>()
                 .Where(a => a.UserId == userId)
                 .ToListAsync();
         }
 
-        public Task<BankAccountDb> GetAccountByIdAsync(int id)
+        public async Task<Wallet> GetWalletAsync(int id)
         {
-            return _database.Table<BankAccountDb>()
+            await Init();
+            return await _database.Table<Wallet>()
                 .Where(a => a.Id == id)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveAccountAsync(BankAccountDb account)
+        public async Task<int> SaveWalletAsync(Wallet wallet)
         {
-            if (account.Id != 0)
-            {
-                return _database.UpdateAsync(account);
-            }
+            await Init();
+            if (wallet.Id != 0)
+                return await _database.UpdateAsync(wallet);
             else
-            {
-                return _database.InsertAsync(account);
-            }
+                return await _database.InsertAsync(wallet);
         }
 
-        public Task<int> DeleteAccountAsync(BankAccountDb account)
+        public async Task<int> DeleteWalletAsync(Wallet wallet)
         {
-            return _database.DeleteAsync(account);
+            await Init();
+            return await _database.DeleteAsync(wallet);
         }
 
-        // Transaction Operations
-        public Task<List<TransactionDb>> GetTransactionsAsync(int accountId)
+        // Transaction methods
+        public async Task<List<TransactionDb>> GetTransactionsAsync(int walletId)
         {
-            return _database.Table<TransactionDb>()
-                .Where(t => t.AccountId == accountId)
+            await Init();
+            return await _database.Table<TransactionDb>()
+                .Where(t => t.AccountId == walletId)
                 .OrderByDescending(t => t.DateTime)
                 .ToListAsync();
         }
 
-        public Task<int> SaveTransactionAsync(TransactionDb transaction)
+        public async Task<int> SaveTransactionAsync(TransactionDb transaction)
         {
-            return _database.InsertAsync(transaction);
+            await Init();
+            return await _database.InsertAsync(transaction);
         }
 
-        public Task<int> DeleteTransactionAsync(TransactionDb transaction)
+        // Helper to update wallet balance
+        public async Task UpdateWalletBalanceAsync(int walletId, decimal amount)
         {
-            return _database.DeleteAsync(transaction);
-        }
-
-        // Helper method to update account balance
-        public async Task<bool> UpdateAccountBalanceAsync(int accountId, decimal newBalance)
-        {
-            var account = await GetAccountByIdAsync(accountId);
-            if (account != null)
+            await Init();
+            var wallet = await GetWalletAsync(walletId);
+            if (wallet != null)
             {
-                account.Balance = newBalance;
-                await SaveAccountAsync(account);
-                return true;
+                wallet.Balance += amount;
+                await SaveWalletAsync(wallet);
             }
-            return false;
         }
     }
 }

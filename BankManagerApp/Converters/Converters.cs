@@ -7,13 +7,30 @@ namespace BankManagerApp.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TransactionType type)
+            if (value is string type)
             {
-                return type == TransactionType.Deposit 
-                    ? Color.FromArgb("#4CAF50")  // Green for deposit
-                    : Color.FromArgb("#FF5722");  // Red for withdraw
+                return type == "Deposit" 
+                    ? Color.FromArgb("#4CAF50")  // Green
+                    : Color.FromArgb("#FF5722");  // Red
             }
             return Colors.Gray;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TransactionIconConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string type)
+            {
+                return type == "Deposit" ? "⬇️" : "⬆️";
+            }
+            return "❓";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

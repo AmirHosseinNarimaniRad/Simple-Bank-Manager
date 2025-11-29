@@ -9,82 +9,58 @@ namespace BankManagerApp.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private BankAccount _selectedAccount;
-        private int _nextId = 1;
+        private ObservableCollection<Wallet> _accounts;
+        public ObservableCollection<Wallet> Accounts
+        {
+            get => _accounts;
+            set
+            {
+                _accounts = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ObservableCollection<BankAccount> Accounts { get; set; }
-
-        public BankAccount SelectedAccount
+        private Wallet _selectedAccount;
+        public Wallet SelectedAccount
         {
             get => _selectedAccount;
             set
             {
                 _selectedAccount = value;
-                OnPropertyChanged();
+                if (_selectedAccount != null)
+                {
+                    OnAccountSelected(_selectedAccount);
+                    _selectedAccount = null; // Reset selection
+                    OnPropertyChanged();
+                }
             }
         }
 
         public ICommand CreateAccountCommand { get; }
-        public ICommand SelectAccountCommand { get; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
-            Accounts = new ObservableCollection<BankAccount>();
-            CreateAccountCommand = new Command(async () => await CreateAccount());
-            SelectAccountCommand = new Command<BankAccount>(async (account) => await SelectAccount(account));
-            
-            // حساب‌های نمونه برای تست
-            CreateSampleAccounts();
+            Accounts = new ObservableCollection<Wallet>();
+            CreateAccountCommand = new Command(OnCreateAccount);
+            // LoadAccounts(); // In a real app, we'd load here or in OnAppearing
         }
 
-        private void CreateSampleAccounts()
+        private async void OnCreateAccount()
         {
-            var account1 = new BankAccount(_nextId++, "حساب جاری");
-            account1.Deposit(5000000);
-            Accounts.Add(account1);
-
-            var account2 = new BankAccount(_nextId++, "حساب پس‌انداز");
-            account2.Deposit(10000000);
-            account2.Withdraw(2000000);
-            Accounts.Add(account2);
-        }
-
-        private async Task CreateAccount()
-        {
-            var page = Shell.Current?.CurrentPage;
-            if (page == null) return;
-            
-            string accountName = await page.DisplayPromptAsync(
-                "حساب جدید",
-                "نام حساب را وارد کنید:",
-                placeholder: "مثال: حساب جاری",
-                maxLength: 50);
-
+            string accountName = await Shell.Current.DisplayPromptAsync("New Wallet", "Enter wallet name:");
             if (!string.IsNullOrWhiteSpace(accountName))
             {
-                var newAccount = new BankAccount(_nextId++, accountName);
+                var newAccount = new Wallet { Name = accountName, Balance = 0, CreatedAt = DateTime.Now };
                 Accounts.Add(newAccount);
-                SelectedAccount = newAccount;
-                
-                await page.DisplayAlert(
-                    "موفق",
-                    $"حساب '{accountName}' با موفقیت ایجاد شد",
-                    "باشه");
+                // Note: In a real MVVM app, we'd call a service to save to DB here
             }
         }
 
-        private async Task SelectAccount(BankAccount account)
+        private async void OnAccountSelected(Wallet account)
         {
-            if (account != null)
-            {
-                await Shell.Current.GoToAsync(nameof(AccountDetailPage), new Dictionary<string, object>
-                {
-                    { "Account", account }
-                });
-            }
+            await Shell.Current.GoToAsync($"AccountDetailPage?accountId={account.Id}");
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

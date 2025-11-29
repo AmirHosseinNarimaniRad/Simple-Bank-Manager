@@ -11,6 +11,7 @@
             </ResourceDictionary.MergedDictionaries>
             
             <converters:TransactionColorConverter x:Key="TransactionColorConverter" />
+            <converters:TransactionIconConverter x:Key="TransactionIconConverter" />
             <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
         </ResourceDictionary>
     </Application.Resources>

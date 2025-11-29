@@ -2,108 +2,84 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BankManagerApp.Views.AccountDetailPage"
-             Title="Account Details"
-             FlowDirection="LeftToRight">
+             FlowDirection="RightToLeft"
+             BackgroundColor="#F8F9FA"
+             Title="جزئیات کیف پول">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="حذف" Order="Primary" Priority="0" Clicked="OnDeleteWalletClicked"/>
+    </ContentPage.ToolbarItems>
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
-            
-            <!-- Account Info Card -->
-            <Border Padding="25" 
-                   StrokeShape="RoundRectangle 20"
-                   StrokeThickness="0"
-                   BackgroundColor="{StaticResource Primary}"
-                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.2}">
+
+            <!-- Account Header -->
+            <Border StrokeShape="RoundRectangle 20" BackgroundColor="#512BD4" StrokeThickness="0" Padding="20">
                 <VerticalStackLayout Spacing="10">
-                    <Label x:Name="AccountNameLabel"
-                           Text="Checking Account" 
-                           FontSize="26"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center"/>
-                    
-                    <BoxView HeightRequest="1" 
-                             Color="White" 
-                             Opacity="0.3"
-                             Margin="0,10"/>
-                    
-                    <Label Text="Current Balance"
-                           FontSize="14"
-                           TextColor="White"
-                           Opacity="0.9"
-                           HorizontalOptions="Center"/>
-                    
-                    <Label x:Name="BalanceLabel"
-                           Text="0 Toman" 
-                           FontSize="36"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center"/>
+                    <Label x:Name="AccountNameLabel" Text="نام کیف پول" TextColor="White" FontSize="16" Opacity="0.9"/>
+                    <Label x:Name="BalanceLabel" Text="0 تومان" TextColor="White" FontSize="32" FontAttributes="Bold"/>
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Transaction Form Card -->
-            <Border Padding="20" 
-                   StrokeShape="RoundRectangle 15"
-                   StrokeThickness="0"
-                   BackgroundColor="{StaticResource White}"
-                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.1}">
+            <!-- New Transaction Section -->
+            <Border StrokeShape="RoundRectangle 15" BackgroundColor="White" StrokeThickness="0" Padding="15">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="💸 Transaction"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Primary}"/>
-                    
-                    <Entry x:Name="AmountEntry"
-                           Placeholder="Amount (Toman)"
-                           Keyboard="Numeric"
-                           FontSize="18"/>
+                    <Label Text="ثبت تراکنش جدید" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
                     
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <Button Grid.Column="0"
-                                Text="💰 Deposit"
-                                Clicked="OnDepositClicked"
-                                BackgroundColor="#4CAF50"
-                                TextColor="White"
-                                FontSize="16"
-                                FontAttributes="Bold"
-                                Padding="12"
-                                CornerRadius="10"/>
-                        
-                        <Button Grid.Column="1"
-                                Text="💵 Withdraw"
-                                Clicked="OnWithdrawClicked"
-                                BackgroundColor="#FF5722"
-                                TextColor="White"
-                                FontSize="16"
-                                FontAttributes="Bold"
-                                Padding="12"
-                                CornerRadius="10"/>
+                        <Button Grid.Column="0" x:Name="IncomeTab" Text="💰 واریز" Clicked="OnTransactionTypeChanged" BackgroundColor="#E8F5E9" TextColor="#2E7D32" CornerRadius="10" FontAttributes="Bold"/>
+                        <Button Grid.Column="1" x:Name="ExpenseTab" Text="💸 هزینه" Clicked="OnTransactionTypeChanged" BackgroundColor="#F5F5F5" TextColor="#666" CornerRadius="10" FontAttributes="Bold"/>
                     </Grid>
+
+                    <Entry x:Name="AmountEntry" Placeholder="مبلغ (تومان)" Keyboard="Numeric" BackgroundColor="#F5F5F5" TextColor="#333"/>
                     
-                    <!-- Status Message -->
-                    <Label x:Name="StatusLabel"
-                           FontSize="14"
-                           HorizontalOptions="Center"
-                           Margin="0,5,0,0"/>
+                    <Picker x:Name="CategoryPicker" Title="انتخاب دسته‌بندی" BackgroundColor="#F5F5F5" TextColor="#333">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>حقوق</x:String>
+                                <x:String>واریز ریالی</x:String>
+                                <x:String>دنگ</x:String>
+                                <x:String>نقدی</x:String>
+                                <x:String>سایر</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <Entry x:Name="DescriptionEntry" Placeholder="توضیحات (اختیاری)" BackgroundColor="#F5F5F5" TextColor="#333"/>
+
+                    <Button Text="ثبت تراکنش" Clicked="OnSubmitTransactionClicked" BackgroundColor="#512BD4" TextColor="White" CornerRadius="10" FontAttributes="Bold"/>
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Transaction History -->
-            <Border Padding="20" 
-                   StrokeShape="RoundRectangle 15"
-                   StrokeThickness="0"
-                   BackgroundColor="{StaticResource White}"
-                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.1}">
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="📋 Transaction History"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Primary}"/>
-                    
-                    <VerticalStackLayout x:Name="TransactionsList" Spacing="10"/>
-                </VerticalStackLayout>
-            </Border>
+            <!-- Transaction History Header -->
+            <Label Text="تاریخچه تراکنش‌ها" FontSize="16" FontAttributes="Bold" TextColor="#333"/>
+            
+            <!-- Transactions List (BindableLayout) -->
+            <StackLayout x:Name="TransactionsContainer" Spacing="10">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" StrokeThickness="0" Padding="10">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Type, Converter={StaticResource TransactionIconConverter}}" FontSize="24" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="{Binding Category}" FontAttributes="Bold" TextColor="#333"/>
+                                    <Label Text="{Binding DateTime, StringFormat='{0:yyyy/MM/dd HH:mm}'}" FontSize="12" TextColor="#888"/>
+                                </VerticalStackLayout>
+                                
+                                <Label Grid.Column="2" Text="{Binding Amount, StringFormat='{0:N0}'}" FontAttributes="Bold" TextColor="{Binding Type, Converter={StaticResource TransactionColorConverter}}" VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+            
+            <!-- Empty State Label (Visible when no transactions) -->
+            <Label x:Name="EmptyStateLabel" 
+                   Text="هنوز تراکنشی ثبت نشده" 
+                   HorizontalOptions="Center" 
+                   TextColor="#888" 
+                   IsVisible="False"/>
 
         </VerticalStackLayout>
     </ScrollView>

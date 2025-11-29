@@ -7,18 +7,12 @@ namespace BankManagerApp.Models
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-
-        [NotNull]
-        public int AccountId { get; set; }
-
-        [NotNull]
-        public string Type { get; set; } = string.Empty; // "Deposit" or "Withdraw"
-
+        public int AccountId { get; set; } // Now refers to WalletId
+        public string Type { get; set; } // Deposit / Withdraw
+        public string Category { get; set; } // e.g., Food, Taxi, etc.
+        public string IncomeType { get; set; } // e.g., Salary, Cash, etc.
         public decimal Amount { get; set; }
-
-        [MaxLength(200)]
-        public string Description { get; set; } = string.Empty;
-
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public string Description { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }

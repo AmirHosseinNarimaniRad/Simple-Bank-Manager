@@ -5,14 +5,22 @@ using BankManagerApp.Models;
 
 namespace BankManagerApp.ViewModels
 {
-    [QueryProperty(nameof(Account), "Account")]
+    [QueryProperty(nameof(AccountId), "accountId")]
     public class AccountDetailViewModel : INotifyPropertyChanged
     {
-        private BankAccount _account;
-        private string _amount;
-        private string _statusMessage;
+        private int _accountId;
+        public int AccountId
+        {
+            get => _accountId;
+            set
+            {
+                _accountId = value;
+                LoadAccount(value);
+            }
+        }
 
-        public BankAccount Account
+        private Wallet _account;
+        public Wallet Account
         {
             get => _account;
             set
@@ -22,6 +30,7 @@ namespace BankManagerApp.ViewModels
             }
         }
 
+        private string _amount;
         public string Amount
         {
             get => _amount;
@@ -32,6 +41,7 @@ namespace BankManagerApp.ViewModels
             }
         }
 
+        private string _statusMessage;
         public string StatusMessage
         {
             get => _statusMessage;
@@ -42,85 +52,79 @@ namespace BankManagerApp.ViewModels
             }
         }
 
+        private Color _statusColor;
+        public Color StatusColor
+        {
+            get => _statusColor;
+            set
+            {
+                _statusColor = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand DepositCommand { get; }
         public ICommand WithdrawCommand { get; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public AccountDetailViewModel()
         {
-            DepositCommand = new Command(async () => await Deposit());
-            WithdrawCommand = new Command(async () => await Withdraw());
+            DepositCommand = new Command(OnDeposit);
+            WithdrawCommand = new Command(OnWithdraw);
         }
 
-        private async Task Deposit()
+        private void LoadAccount(int id)
         {
-            if (Account == null)
-                return;
+            // In a real app, load from database
+            // For now, we rely on the View to load data or inject a service here
+        }
 
-            if (string.IsNullOrWhiteSpace(Amount))
+        private void OnDeposit()
+        {
+            if (decimal.TryParse(Amount, out decimal value) && value > 0)
             {
-                await ShowError("لطفاً مبلغ را وارد کنید");
-                return;
-            }
-
-            if (!decimal.TryParse(Amount, out decimal amount))
-            {
-                await ShowError("مبلغ وارد شده معتبر نیست");
-                return;
-            }
-
-            if (Account.Deposit(amount))
-            {
-                StatusMessage = $"✅ واریز {amount:N0} تومان با موفقیت انجام شد";
-                Amount = string.Empty;
-                
-                await Task.Delay(2000);
-                StatusMessage = string.Empty;
+                if (Account != null)
+                {
+                    Account.Balance += value;
+                    StatusMessage = $"Deposited {value:N0}";
+                    StatusColor = Colors.Green;
+                    Amount = string.Empty;
+                }
             }
             else
             {
-                await ShowError("مبلغ باید بیشتر از صفر باشد");
+                StatusMessage = "Invalid Amount";
+                StatusColor = Colors.Red;
             }
         }
 
-        private async Task Withdraw()
+        private void OnWithdraw()
         {
-            if (Account == null)
-                return;
-
-            if (string.IsNullOrWhiteSpace(Amount))
+            if (decimal.TryParse(Amount, out decimal value) && value > 0)
             {
-                await ShowError("لطفاً مبلغ را وارد کنید");
-                return;
-            }
-
-            if (!decimal.TryParse(Amount, out decimal amount))
-            {
-                await ShowError("مبلغ وارد شده معتبر نیست");
-                return;
-            }
-
-            if (Account.Withdraw(amount))
-            {
-                StatusMessage = $"✅ برداشت {amount:N0} تومان با موفقیت انجام شد";
-                Amount = string.Empty;
-                
-                await Task.Delay(2000);
-                StatusMessage = string.Empty;
+                if (Account != null)
+                {
+                    if (Account.Balance >= value)
+                    {
+                        Account.Balance -= value;
+                        StatusMessage = $"Withdrawn {value:N0}";
+                        StatusColor = Colors.Green;
+                        Amount = string.Empty;
+                    }
+                    else
+                    {
+                        StatusMessage = "Insufficient Funds";
+                        StatusColor = Colors.Red;
+                    }
+                }
             }
             else
             {
-                await ShowError("موجودی کافی نیست یا مبلغ نامعتبر است");
+                StatusMessage = "Invalid Amount";
+                StatusColor = Colors.Red;
             }
         }
-
-        private async Task ShowError(string message)
-        {
-            StatusMessage = $"❌ {message}";
-            await Task.Delay(3000);
-            StatusMessage = string.Empty;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

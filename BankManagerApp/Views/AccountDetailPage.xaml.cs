@@ -8,208 +8,156 @@ namespace BankManagerApp.Views
     public partial class AccountDetailPage : ContentPage
     {
         private readonly DatabaseService _database;
-        private BankAccountDb _account;
+        private Wallet _account;
         private List<TransactionDb> _transactions;
+        private string _currentTransactionType = "Income"; // Default to Income (واریز)
 
-        public string AccountId { get; set; }
+        public int AccountId
+        {
+            set
+            {
+                LoadAccount(value);
+            }
+        }
 
         public AccountDetailPage()
         {
             InitializeComponent();
             _database = new DatabaseService();
+            UpdateTransactionTypeUI();
         }
 
-        protected override async void OnAppearing()
+        private async void LoadAccount(int accountId)
         {
-            base.OnAppearing();
-            await LoadAccountData();
-        }
-
-        private async Task LoadAccountData()
-        {
-            if (int.TryParse(AccountId, out int accountId))
+            _account = await _database.GetWalletAsync(accountId);
+            if (_account != null)
             {
-                _account = await _database.GetAccountByIdAsync(accountId);
-                if (_account != null)
-                {
-                    AccountNameLabel.Text = _account.Name;
-                    UpdateBalance();
-                    await LoadTransactions();
-                }
-            }
-        }
-
-        private async Task LoadTransactions()
-        {
-            _transactions = await _database.GetTransactionsAsync(_account.Id);
-            DisplayTransactions();
-        }
-
-        private void DisplayTransactions()
-        {
-            TransactionsList.Children.Clear();
-
-            if (_transactions == null || _transactions.Count == 0)
-            {
-                var emptyLabel = new Label
-                {
-                    Text = "No transactions yet",
-                    FontSize = 14,
-                    TextColor = Colors.Gray,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(0, 20, 0, 0)
-                };
-                TransactionsList.Children.Add(emptyLabel);
-                return;
-            }
-
-            foreach (var transaction in _transactions.Take(10))
-            {
-                var frame = new Border
-                {
-                    Padding = 15,
-                    Margin = new Thickness(0, 0, 0, 10),
-                    StrokeShape = new RoundRectangle { CornerRadius = 10 },
-                    StrokeThickness = 0,
-                    BackgroundColor = Color.FromArgb("#F5F5F5"),
-                };
-
-                var grid = new Grid
-                {
-                    ColumnDefinitions =
-                    {
-                        new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                        new ColumnDefinition { Width = GridLength.Auto }
-                    },
-                    RowDefinitions =
-                    {
-                        new RowDefinition { Height = GridLength.Auto },
-                        new RowDefinition { Height = GridLength.Auto }
-                    }
-                };
-
-                var typeLabel = new Label
-                {
-                    Text = transaction.Type == "Deposit" ? "✅ Deposit" : "❌ Withdraw",
-                    FontSize = 16,
-                    FontAttributes = FontAttributes.Bold
-                };
-                Grid.SetColumn(typeLabel, 0);
-                Grid.SetRow(typeLabel, 0);
-
-                var amountLabel = new Label
-                {
-                    Text = $"{(transaction.Type == "Deposit" ? "+" : "-")}{transaction.Amount:N0} Toman",
-                    FontSize = 16,
-                    FontAttributes = FontAttributes.Bold,
-                    TextColor = transaction.Type == "Deposit" ? Color.FromArgb("#4CAF50") : Color.FromArgb("#FF5722")
-                };
-                Grid.SetColumn(amountLabel, 1);
-                Grid.SetRow(amountLabel, 0);
-
-                var dateLabel = new Label
-                {
-                    Text = transaction.DateTime.ToString("yyyy/MM/dd HH:mm"),
-                    FontSize = 12,
-                    TextColor = Colors.Gray,
-                    Margin = new Thickness(0, 5, 0, 0)
-                };
-                Grid.SetColumn(dateLabel, 0);
-                Grid.SetRow(dateLabel, 1);
-                Grid.SetColumnSpan(dateLabel, 2);
-
-                grid.Children.Add(typeLabel);
-                grid.Children.Add(amountLabel);
-                grid.Children.Add(dateLabel);
-
-                frame.Content = grid;
-                TransactionsList.Children.Add(frame);
-            }
-        }
-
-        private async void OnDepositClicked(object sender, EventArgs e)
-        {
-            if (_account == null) return;
-
-            if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
-            {
-                _account.Balance += amount;
-                await _database.SaveAccountAsync(_account);
-
-                var transaction = new TransactionDb
-                {
-                    AccountId = _account.Id,
-                    Type = "Deposit",
-                    Amount = amount,
-                    Description = "Deposit",
-                    DateTime = DateTime.Now
-                };
-                await _database.SaveTransactionAsync(transaction);
-
-                UpdateUI($"Deposit of {amount:N0} Toman successful", Colors.Green);
-                AmountEntry.Text = "";
+                AccountNameLabel.Text = _account.Name;
+                UpdateBalance();
                 await LoadTransactions();
-            }
-            else
-            {
-                UpdateUI("Please enter a valid amount", Colors.Red);
-            }
-        }
-
-        private async void OnWithdrawClicked(object sender, EventArgs e)
-        {
-            if (_account == null) return;
-
-            if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
-            {
-                if (_account.Balance >= amount)
-                {
-                    _account.Balance -= amount;
-                    await _database.SaveAccountAsync(_account);
-
-                    var transaction = new TransactionDb
-                    {
-                        AccountId = _account.Id,
-                        Type = "Withdraw",
-                        Amount = amount,
-                        Description = "Withdraw",
-                        DateTime = DateTime.Now
-                    };
-                    await _database.SaveTransactionAsync(transaction);
-
-                    UpdateUI($"Withdrawal of {amount:N0} Toman successful", Colors.Green);
-                    AmountEntry.Text = "";
-                    await LoadTransactions();
-                }
-                else
-                {
-                    UpdateUI("Insufficient balance", Colors.Red);
-                }
-            }
-            else
-            {
-                UpdateUI("Please enter a valid amount", Colors.Red);
             }
         }
 
         private void UpdateBalance()
         {
-            BalanceLabel.Text = $"{_account.Balance:N0} Toman";
+            if (_account != null)
+            {
+                BalanceLabel.Text = $"{_account.Balance:N0} تومان";
+            }
         }
 
-        private void UpdateUI(string message, Color color)
+        private async Task LoadTransactions()
         {
-            UpdateBalance();
-            StatusLabel.Text = message;
-            StatusLabel.TextColor = color;
-
-            Task.Delay(3000).ContinueWith(_ =>
+            if (_account != null)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
+                _transactions = await _database.GetTransactionsAsync(_account.Id);
+                
+                // Sort by date descending (newest first)
+                _transactions = _transactions.OrderByDescending(t => t.DateTime).ToList();
+                
+                BindableLayout.SetItemsSource(TransactionsContainer, _transactions);
+                
+                if (EmptyStateLabel != null)
                 {
-                    StatusLabel.Text = "";
-                });
-            });
+                    EmptyStateLabel.IsVisible = _transactions.Count == 0;
+                }
+            }
+        }
+
+        private void OnTransactionTypeChanged(object sender, EventArgs e)
+        {
+            if (sender == IncomeTab)
+            {
+                _currentTransactionType = "Income";
+            }
+            else if (sender == ExpenseTab)
+            {
+                _currentTransactionType = "Expense";
+            }
+            UpdateTransactionTypeUI();
+        }
+
+        private void UpdateTransactionTypeUI()
+        {
+            if (_currentTransactionType == "Income")
+            {
+                IncomeTab.BackgroundColor = Color.FromArgb("#E8F5E9");
+                IncomeTab.TextColor = Color.FromArgb("#2E7D32");
+                ExpenseTab.BackgroundColor = Color.FromArgb("#F5F5F5");
+                ExpenseTab.TextColor = Color.FromArgb("#666");
+                
+                CategoryPicker.ItemsSource = new string[] { "حقوق", "واریز ریالی", "دنگ", "نقدی", "سایر" };
+            }
+            else
+            {
+                IncomeTab.BackgroundColor = Color.FromArgb("#F5F5F5");
+                IncomeTab.TextColor = Color.FromArgb("#666");
+                ExpenseTab.BackgroundColor = Color.FromArgb("#FFEBEE");
+                ExpenseTab.TextColor = Color.FromArgb("#C62828");
+
+                CategoryPicker.ItemsSource = new string[] { "خوراکی", "حمل‌ونقل", "خرید", "قبض", "تفریح", "سایر" };
+            }
+            CategoryPicker.SelectedIndex = 0;
+        }
+
+        private async void OnSubmitTransactionClicked(object sender, EventArgs e)
+        {
+            if (_account == null) return;
+
+            if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
+            {
+                // REMOVED: Balance check - allow negative balance
+                // This allows users to track overspending
+
+                // Update Balance
+                if (_currentTransactionType == "Income")
+                    _account.Balance += amount;
+                else
+                    _account.Balance -= amount;
+
+                await _database.SaveWalletAsync(_account);
+
+                // Save Transaction
+                var transaction = new TransactionDb
+                {
+                    AccountId = _account.Id,
+                    Type = _currentTransactionType == "Income" ? "Deposit" : "Withdraw",
+                    Category = CategoryPicker.SelectedItem?.ToString() ?? "سایر",
+                    IncomeType = _currentTransactionType == "Income" ? CategoryPicker.SelectedItem?.ToString() : null,
+                    Amount = amount,
+                    Description = DescriptionEntry.Text,
+                    DateTime = DateTime.Now
+                };
+                await _database.SaveTransactionAsync(transaction);
+
+                // UI Feedback
+                UpdateBalance();
+                AmountEntry.Text = "";
+                DescriptionEntry.Text = "";
+                await LoadTransactions();
+                
+                await DisplayAlert("موفق", "تراکنش با موفقیت ثبت شد", "باشه");
+            }
+            else
+            {
+                await DisplayAlert("خطا", "لطفاً مبلغ معتبر وارد کنید", "باشه");
+            }
+        }
+
+        private async void OnDeleteWalletClicked(object sender, EventArgs e)
+        {
+            if (_account == null) return;
+
+            bool confirm = await DisplayAlert("حذف کیف پول", 
+                $"آیا مطمئن هستید که می‌خواهید کیف پول '{_account.Name}' را حذف کنید؟\nاین عملیات غیرقابل بازگشت است و تمام تراکنش‌های آن پاک خواهد شد.", 
+                "بله، حذف کن", 
+                "خیر");
+
+            if (confirm)
+            {
+                await _database.DeleteWalletAsync(_account);
+                await Navigation.PopAsync();
+            }
         }
     }
 }
