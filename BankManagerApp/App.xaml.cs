@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using BankManagerApp.Converters;
+using Microsoft.Extensions.DependencyInjection;
+using BankManagerApp.Converters;
+using BankManagerApp.Views;
 
 namespace BankManagerApp;
 
@@ -12,6 +15,16 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(new AppShell());
+		// Check if user is logged in
+		bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
+		
+		if (isLoggedIn)
+		{
+			return new Window(new AppShell());
+		}
+		else
+		{
+			return new Window(new NavigationPage(new LoginPage()));
+		}
 	}
 }

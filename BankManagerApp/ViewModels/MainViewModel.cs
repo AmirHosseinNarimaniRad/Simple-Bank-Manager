@@ -51,7 +51,10 @@ namespace BankManagerApp.ViewModels
 
         private async Task CreateAccount()
         {
-            string accountName = await Application.Current.MainPage.DisplayPromptAsync(
+            var page = Shell.Current?.CurrentPage;
+            if (page == null) return;
+            
+            string accountName = await page.DisplayPromptAsync(
                 "حساب جدید",
                 "نام حساب را وارد کنید:",
                 placeholder: "مثال: حساب جاری",
@@ -63,7 +66,7 @@ namespace BankManagerApp.ViewModels
                 Accounts.Add(newAccount);
                 SelectedAccount = newAccount;
                 
-                await Application.Current.MainPage.DisplayAlert(
+                await page.DisplayAlert(
                     "موفق",
                     $"حساب '{accountName}' با موفقیت ایجاد شد",
                     "باشه");

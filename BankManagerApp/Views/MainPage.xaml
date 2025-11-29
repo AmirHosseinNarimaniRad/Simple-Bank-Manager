@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:BankManagerApp.ViewModels"
-             xmlns:models="clr-namespace:BankManagerApp.Models"
              x:Class="BankManagerApp.Views.MainPage"
-             Title="مدیریت حساب‌های بانکی"
-             FlowDirection="RightToLeft">
-
-    <ContentPage.BindingContext>
-        <viewmodels:MainViewModel />
-    </ContentPage.BindingContext>
+             Title="My Accounts"
+             FlowDirection="LeftToRight">
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="20">
         
         <!-- Header -->
         <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
-            <Label Text="💰 مدیریت حساب‌های بانکی" 
-                   FontSize="28" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource Primary}"/>
-            <Label Text="حساب‌های شما" 
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                <Label x:Name="WelcomeLabel"
+                       Text="Welcome" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       HorizontalOptions="StartAndExpand"/>
+                
+                <Button Text="Logout"
+                        Clicked="OnLogoutClicked"
+                        BackgroundColor="{StaticResource Gray300}"
+                        TextColor="{StaticResource Gray900}"
+                        FontSize="14"
+                        Padding="15,8"
+                        CornerRadius="10"/>
+            </HorizontalStackLayout>
+            
+            <Label Text="Your Bank Accounts" 
                    FontSize="18" 
                    FontAttributes="Bold"
                    Margin="0,10,0,0"/>
@@ -28,79 +34,13 @@
 
         <!-- Accounts List -->
         <ScrollView Grid.Row="1">
-            <CollectionView ItemsSource="{Binding Accounts}"
-                          SelectionMode="None">
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout HorizontalOptions="Center" 
-                                       VerticalOptions="Center"
-                                       Spacing="15">
-                        <Label Text="📭" 
-                               FontSize="60"
-                               HorizontalOptions="Center"/>
-                        <Label Text="هنوز حسابی ایجاد نشده است" 
-                               FontSize="16"
-                               TextColor="{StaticResource Gray600}"
-                               HorizontalOptions="Center"/>
-                        <Label Text="روی دکمه زیر کلیک کنید تا حساب جدید بسازید" 
-                               FontSize="14"
-                               TextColor="{StaticResource Gray500}"
-                               HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-                </CollectionView.EmptyView>
-                
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:BankAccount">
-                        <Frame Margin="0,0,0,15" 
-                               Padding="20"
-                               CornerRadius="15"
-                               HasShadow="True"
-                               BackgroundColor="{StaticResource White}">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}, Path=SelectAccountCommand}"
-                                    CommandParameter="{Binding .}"/>
-                            </Frame.GestureRecognizers>
-                            
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
-                                <!-- Account Icon -->
-                                <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
-                                       Text="💳"
-                                       FontSize="50"
-                                       VerticalOptions="Center"
-                                       Margin="0,0,15,0"/>
-                                
-                                <!-- Account Name -->
-                                <Label Grid.Row="0" Grid.Column="0"
-                                       Text="{Binding Name}"
-                                       FontSize="20"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Primary}"/>
-                                
-                                <!-- Account ID -->
-                                <Label Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding Id, StringFormat='شناسه: {0}'}"
-                                       FontSize="14"
-                                       TextColor="{StaticResource Gray600}"
-                                       Margin="0,5,0,0"/>
-                                
-                                <!-- Balance -->
-                                <Label Grid.Row="2" Grid.Column="0"
-                                       Text="{Binding BalanceText}"
-                                       FontSize="24"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Secondary}"
-                                       Margin="0,10,0,0"/>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <VerticalStackLayout x:Name="AccountsList" Spacing="15"/>
         </ScrollView>
 
         <!-- Create Account Button -->
         <Button Grid.Row="2"
-                Text="➕ ایجاد حساب جدید"
-                Command="{Binding CreateAccountCommand}"
+                Text="➕ Create New Account"
+                Clicked="OnCreateAccountClicked"
                 FontSize="18"
                 FontAttributes="Bold"
                 Padding="15"

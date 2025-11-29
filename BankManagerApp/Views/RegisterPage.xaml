@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BankManagerApp.Views.RegisterPage"
+             Title="Register"
+             FlowDirection="LeftToRight"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+            
+            <!-- Logo/Icon -->
+            <Label Text="📝" 
+                   FontSize="80"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"/>
+            
+            <!-- Title -->
+            <Label Text="Register" 
+                   FontSize="32" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Primary}"/>
+            
+            <Label Text="Please enter your details" 
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Gray600}"
+                   Margin="0,0,0,20"/>
+
+            <!-- First Name Entry -->
+            <Frame Padding="0" 
+                   CornerRadius="15" 
+                   HasShadow="False"
+                   BorderColor="{StaticResource Gray300}">
+                <Entry x:Name="FirstNameEntry"
+                       Placeholder="First Name"
+                       FontSize="18"
+                       Margin="15,10"/>
+            </Frame>
+
+            <!-- Last Name Entry -->
+            <Frame Padding="0" 
+                   CornerRadius="15" 
+                   HasShadow="False"
+                   BorderColor="{StaticResource Gray300}">
+                <Entry x:Name="LastNameEntry"
+                       Placeholder="Last Name"
+                       FontSize="18"
+                       Margin="15,10"/>
+            </Frame>
+
+            <!-- Phone Number Entry -->
+            <Frame Padding="0" 
+                   CornerRadius="15" 
+                   HasShadow="False"
+                   BorderColor="{StaticResource Gray300}">
+                <Entry x:Name="PhoneEntry"
+                       Placeholder="Phone Number (e.g., 09123456789)"
+                       Keyboard="Telephone"
+                       FontSize="18"
+                       Margin="15,10"/>
+            </Frame>
+
+            <!-- Error Message -->
+            <Label x:Name="ErrorLabel"
+                   TextColor="Red"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   IsVisible="False"/>
+
+            <!-- Register Button -->
+            <Button Text="Register"
+                    Clicked="OnRegisterClicked"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    Padding="15"
+                    CornerRadius="15"
+                    Margin="0,20,0,0"/>
+
+            <!-- Login Link -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                <Label Text="Already have an account?"
+                       FontSize="14"
+                       TextColor="{StaticResource Gray600}"/>
+                <Label Text="Login"
+                       FontSize="14"
+                       TextColor="{StaticResource Primary}"
+                       FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLoginTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

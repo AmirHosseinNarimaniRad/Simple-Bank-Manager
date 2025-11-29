@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:BankManagerApp.ViewModels"
-             xmlns:models="clr-namespace:BankManagerApp.Models"
              x:Class="BankManagerApp.Views.AccountDetailPage"
-             Title="جزئیات حساب"
-             FlowDirection="RightToLeft">
-
-    <ContentPage.BindingContext>
-        <viewmodels:AccountDetailViewModel />
-    </ContentPage.BindingContext>
+             Title="Account Details"
+             FlowDirection="LeftToRight">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
             
             <!-- Account Info Card -->
-            <Frame Padding="25" 
-                   CornerRadius="20" 
+            <Border Padding="25" 
+                   StrokeShape="RoundRectangle 20"
+                   StrokeThickness="0"
                    BackgroundColor="{StaticResource Primary}"
-                   HasShadow="True">
+                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.2}">
                 <VerticalStackLayout Spacing="10">
-                    <Label Text="{Binding Account.Name}"
+                    <Label x:Name="AccountNameLabel"
+                           Text="Checking Account" 
                            FontSize="26"
                            FontAttributes="Bold"
                            TextColor="White"
-                           HorizontalOptions="Center"/>
-                    
-                    <Label Text="{Binding Account.Id, StringFormat='شناسه حساب: {0}'}"
-                           FontSize="14"
-                           TextColor="White"
-                           Opacity="0.9"
                            HorizontalOptions="Center"/>
                     
                     <BoxView HeightRequest="1" 
@@ -37,42 +27,42 @@
                              Opacity="0.3"
                              Margin="0,10"/>
                     
-                    <Label Text="موجودی فعلی"
+                    <Label Text="Current Balance"
                            FontSize="14"
                            TextColor="White"
                            Opacity="0.9"
                            HorizontalOptions="Center"/>
                     
-                    <Label Text="{Binding Account.BalanceText}"
+                    <Label x:Name="BalanceLabel"
+                           Text="0 Toman" 
                            FontSize="36"
                            FontAttributes="Bold"
                            TextColor="White"
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Transaction Form Card -->
-            <Frame Padding="20" 
-                   CornerRadius="15" 
+            <Border Padding="20" 
+                   StrokeShape="RoundRectangle 15"
+                   StrokeThickness="0"
                    BackgroundColor="{StaticResource White}"
-                   HasShadow="True">
+                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.1}">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="💸 انجام تراکنش"
+                    <Label Text="💸 Transaction"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="{StaticResource Primary}"/>
                     
-                    <Entry Placeholder="مبلغ (تومان)"
-                           Text="{Binding Amount}"
+                    <Entry x:Name="AmountEntry"
+                           Placeholder="Amount (Toman)"
                            Keyboard="Numeric"
-                           FontSize="18"
-                           PlaceholderColor="{StaticResource Gray400}"
-                           TextColor="{StaticResource Gray900}"/>
+                           FontSize="18"/>
                     
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <Button Grid.Column="0"
-                                Text="💰 واریز"
-                                Command="{Binding DepositCommand}"
+                                Text="💰 Deposit"
+                                Clicked="OnDepositClicked"
                                 BackgroundColor="#4CAF50"
                                 TextColor="White"
                                 FontSize="16"
@@ -81,8 +71,8 @@
                                 CornerRadius="10"/>
                         
                         <Button Grid.Column="1"
-                                Text="💵 برداشت"
-                                Command="{Binding WithdrawCommand}"
+                                Text="💵 Withdraw"
+                                Clicked="OnWithdrawClicked"
                                 BackgroundColor="#FF5722"
                                 TextColor="White"
                                 FontSize="16"
@@ -92,66 +82,29 @@
                     </Grid>
                     
                     <!-- Status Message -->
-                    <Label Text="{Binding StatusMessage}"
+                    <Label x:Name="StatusLabel"
                            FontSize="14"
                            HorizontalOptions="Center"
-                           IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
                            Margin="0,5,0,0"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Transaction History -->
-            <Frame Padding="20" 
-                   CornerRadius="15" 
+            <Border Padding="20" 
+                   StrokeShape="RoundRectangle 15"
+                   StrokeThickness="0"
                    BackgroundColor="{StaticResource White}"
-                   HasShadow="True">
+                   Shadow="{Shadow Brush=Black, Offset='0,2', Radius=5, Opacity=0.1}">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="📋 تاریخچه تراکنش‌ها"
+                    <Label Text="📋 Transaction History"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="{StaticResource Primary}"/>
                     
-                    <CollectionView ItemsSource="{Binding Account.Transactions}">
-                        <CollectionView.EmptyView>
-                            <Label Text="هنوز تراکنشی انجام نشده است"
-                                   FontSize="14"
-                                   TextColor="{StaticResource Gray500}"
-                                   HorizontalOptions="Center"
-                                   Margin="0,20"/>
-                        </CollectionView.EmptyView>
-                        
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Transaction">
-                                <Frame Padding="15" 
-                                       Margin="0,0,0,10"
-                                       CornerRadius="10"
-                                       BackgroundColor="{StaticResource Gray100}"
-                                       HasShadow="False">
-                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
-                                        <Label Grid.Row="0" Grid.Column="0"
-                                               Text="{Binding TypeText}"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               TextColor="{StaticResource Gray900}"/>
-                                        
-                                        <Label Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding AmountText}"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               TextColor="{Binding Type, Converter={StaticResource TransactionColorConverter}}"/>
-                                        
-                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                               Text="{Binding DateTimeText}"
-                                               FontSize="12"
-                                               TextColor="{StaticResource Gray600}"
-                                               Margin="0,5,0,0"/>
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <VerticalStackLayout x:Name="TransactionsList" Spacing="10"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
