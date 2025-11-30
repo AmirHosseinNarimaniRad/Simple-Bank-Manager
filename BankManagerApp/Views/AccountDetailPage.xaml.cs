@@ -361,31 +361,44 @@ namespace BankManagerApp.Views
         {
             if (_transactions == null) return;
 
-            decimal totalIncome = _transactions.Where(t => t.Type == "Income").Sum(t => t.Amount);
-            decimal totalExpense = _transactions.Where(t => t.Type == "Expense").Sum(t => t.Amount);
+            // Robust comparison: Handle case sensitivity and whitespace
+            // Also handle mismatch between "Income"/"Expense" and "Deposit"/"Withdraw"
+            decimal totalIncome = _transactions
+                .Where(t => !string.IsNullOrEmpty(t.Type) && 
+                           (t.Type.Trim().Equals("Income", StringComparison.OrdinalIgnoreCase) || 
+                            t.Type.Trim().Equals("Deposit", StringComparison.OrdinalIgnoreCase)))
+                .Sum(t => t.Amount);
 
-            SelectedDateIncomeLabel.Text = $"{totalIncome:N0} تومان";
-            SelectedDateExpenseLabel.Text = $"{totalExpense:N0} تومان";
+            decimal totalExpense = _transactions
+                .Where(t => !string.IsNullOrEmpty(t.Type) && 
+                           (t.Type.Trim().Equals("Expense", StringComparison.OrdinalIgnoreCase) || 
+                            t.Type.Trim().Equals("Withdraw", StringComparison.OrdinalIgnoreCase)))
+                .Sum(t => t.Amount);
 
-            // Update Summary Label
-            string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
-            if (_selectedDate.HasValue)
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                // Fix: Use PersianCalendar to get Persian date components
-                int pYear = _persianCalendar.GetYear(_selectedDate.Value);
-                int pMonth = _persianCalendar.GetMonth(_selectedDate.Value);
-                int pDay = _persianCalendar.GetDayOfMonth(_selectedDate.Value);
-                
-                CalendarSummaryLabel.Text = $"آمار روز {pDay} {monthNames[pMonth - 1]} {pYear}";
-            }
-            else if (_isYearView)
-            {
-                CalendarSummaryLabel.Text = $"آمار کل سال {_currentYear}";
-            }
-            else
-            {
-                CalendarSummaryLabel.Text = $"آمار ماه {monthNames[_currentMonth - 1]} {_currentYear}";
-            }
+                SelectedDateIncomeLabel.Text = $"{totalIncome:N0} تومان";
+                SelectedDateExpenseLabel.Text = $"{totalExpense:N0} تومان";
+
+                // Update Summary Label
+                string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
+                if (_selectedDate.HasValue)
+                {
+                    int pYear = _persianCalendar.GetYear(_selectedDate.Value);
+                    int pMonth = _persianCalendar.GetMonth(_selectedDate.Value);
+                    int pDay = _persianCalendar.GetDayOfMonth(_selectedDate.Value);
+                    
+                    CalendarSummaryLabel.Text = $"آمار روز {pDay} {monthNames[pMonth - 1]} {pYear}";
+                }
+                else if (_isYearView)
+                {
+                    CalendarSummaryLabel.Text = $"آمار کل سال {_currentYear}";
+                }
+                else
+                {
+                    CalendarSummaryLabel.Text = $"آمار ماه {monthNames[_currentMonth - 1]} {_currentYear}";
+                }
+            });
         }
     }
 }

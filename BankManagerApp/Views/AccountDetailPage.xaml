@@ -102,7 +102,7 @@
                     <Border x:Name="StatsContainer" StrokeShape="RoundRectangle 10" BackgroundColor="#F5F5F5" StrokeThickness="0" Padding="10" Margin="0,5,0,0">
                         <Grid ColumnDefinitions="*,*">
                             <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                <Label Text="درآمد" HorizontalOptions="Center" TextColor="#2E7D32" FontSize="12"/>
+                                <Label Text="واریزی" HorizontalOptions="Center" TextColor="#2E7D32" FontSize="12"/>
                                 <Label x:Name="SelectedDateIncomeLabel" Text="0" HorizontalOptions="Center" TextColor="#2E7D32" FontAttributes="Bold"/>
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="1" Spacing="2">
