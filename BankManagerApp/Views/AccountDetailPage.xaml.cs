@@ -95,7 +95,7 @@ namespace BankManagerApp.Views
                 ExpenseTab.BackgroundColor = Color.FromArgb("#FFEBEE");
                 ExpenseTab.TextColor = Color.FromArgb("#C62828");
 
-                CategoryPicker.ItemsSource = new string[] { "خوراکی", "حمل‌ونقل", "خرید", "قبض", "تفریح", "سایر" };
+                CategoryPicker.ItemsSource = new string[] { "خوراکی", "حمل‌ونقل", "خرید", "قبض", "تفریح", "سایر","بیف لاین" };
             }
             CategoryPicker.SelectedIndex = 0;
         }
