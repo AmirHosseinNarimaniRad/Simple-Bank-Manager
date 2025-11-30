@@ -30,6 +30,7 @@ namespace BankManagerApp.Services
                 return;
 
             _database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+            Console.WriteLine($"*** DATABASE PATH: {Constants.DatabasePath} ***");
             var result = await _database.CreateTablesAsync<User, Wallet, TransactionDb>();
         }
 

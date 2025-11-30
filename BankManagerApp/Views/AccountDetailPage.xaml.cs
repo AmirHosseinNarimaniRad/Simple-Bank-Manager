@@ -361,8 +361,6 @@ namespace BankManagerApp.Views
         {
             if (_transactions == null) return;
 
-            // Robust comparison: Handle case sensitivity and whitespace
-            // Also handle mismatch between "Income"/"Expense" and "Deposit"/"Withdraw"
             decimal totalIncome = _transactions
                 .Where(t => !string.IsNullOrEmpty(t.Type) && 
                            (t.Type.Trim().Equals("Income", StringComparison.OrdinalIgnoreCase) || 
