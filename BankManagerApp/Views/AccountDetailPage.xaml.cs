@@ -283,20 +283,22 @@ namespace BankManagerApp.Views
 
         private void OnNextMonthClicked(object sender, EventArgs e)
         {
+            // In RTL, "Next" (Left Arrow) should go to Next Month
             _currentMonth++;
             if (_currentMonth > 12)
             {
                 _currentMonth = 1;
                 _currentYear++;
             }
-            _selectedDate = null;
-            _isYearView = false; // Switch to month view on navigation
+            _selectedDate = null; 
+            _isYearView = false;
             RenderCalendar();
             _ = LoadTransactions();
         }
 
         private void OnPrevMonthClicked(object sender, EventArgs e)
         {
+            // In RTL, "Prev" (Right Arrow) should go to Previous Month
             _currentMonth--;
             if (_currentMonth < 1)
             {
@@ -349,6 +351,12 @@ namespace BankManagerApp.Views
             _ = LoadTransactions();
         }
 
+        private void OnToggleCalendarClicked(object sender, EventArgs e)
+        {
+            CalendarContent.IsVisible = !CalendarContent.IsVisible;
+            ToggleCalendarButton.Text = CalendarContent.IsVisible ? "▲" : "▼";
+        }
+
         private void UpdateStats()
         {
             if (_transactions == null) return;
@@ -358,6 +366,26 @@ namespace BankManagerApp.Views
 
             SelectedDateIncomeLabel.Text = $"{totalIncome:N0} تومان";
             SelectedDateExpenseLabel.Text = $"{totalExpense:N0} تومان";
+
+            // Update Summary Label
+            string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
+            if (_selectedDate.HasValue)
+            {
+                // Fix: Use PersianCalendar to get Persian date components
+                int pYear = _persianCalendar.GetYear(_selectedDate.Value);
+                int pMonth = _persianCalendar.GetMonth(_selectedDate.Value);
+                int pDay = _persianCalendar.GetDayOfMonth(_selectedDate.Value);
+                
+                CalendarSummaryLabel.Text = $"آمار روز {pDay} {monthNames[pMonth - 1]} {pYear}";
+            }
+            else if (_isYearView)
+            {
+                CalendarSummaryLabel.Text = $"آمار کل سال {_currentYear}";
+            }
+            else
+            {
+                CalendarSummaryLabel.Text = $"آمار ماه {monthNames[_currentMonth - 1]} {_currentYear}";
+            }
         }
     }
 }

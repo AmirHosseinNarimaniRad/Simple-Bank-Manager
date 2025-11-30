@@ -54,38 +54,52 @@
             <!-- Calendar Section -->
             <Border StrokeShape="RoundRectangle 15" BackgroundColor="White" StrokeThickness="0" Padding="15">
                 <VerticalStackLayout Spacing="10">
-                    <!-- Year Navigation -->
-                    <Grid ColumnDefinitions="40,*,40" Margin="0,0,0,5">
-                        <Button Grid.Column="0" Text="❮" Clicked="OnNextYearClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
-                        <Button Grid.Column="1" x:Name="CurrentYearLabel" Text="1403" Clicked="OnViewYearStatsClicked" BackgroundColor="Transparent" TextColor="#333" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center"/>
-                        <Button Grid.Column="2" Text="❯" Clicked="OnPrevYearClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
+                    <!-- Header (Always Visible) -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="تقویم و آمار" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
+                            <Label x:Name="CalendarSummaryLabel" Text="نمایش آمار ماه جاری" FontSize="12" TextColor="#888"/>
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" x:Name="ToggleCalendarButton" Text="▼" Clicked="OnToggleCalendarClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" HeightRequest="40" WidthRequest="40" CornerRadius="20" Padding="0"/>
                     </Grid>
 
-                    <!-- Month Navigation -->
-                    <Grid ColumnDefinitions="40,*,40">
-                        <Button Grid.Column="0" Text="❮" Clicked="OnNextMonthClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
-                        <Label Grid.Column="1" x:Name="CurrentMonthLabel" Text="ماه جاری" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
-                        <Button Grid.Column="2" Text="❯" Clicked="OnPrevMonthClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
-                    </Grid>
+                    <!-- Collapsible Content -->
+                    <VerticalStackLayout x:Name="CalendarContent" IsVisible="False" Spacing="10">
+                        <BoxView HeightRequest="1" Color="#EEEEEE" Margin="0,5"/>
+                        
+                        <!-- Year Navigation -->
+                        <Grid ColumnDefinitions="40,*,40" Margin="0,0,0,5">
+                            <Button Grid.Column="0" Text="❯" Clicked="OnNextYearClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
+                            <Button Grid.Column="1" x:Name="CurrentYearLabel" Text="1403" Clicked="OnViewYearStatsClicked" BackgroundColor="Transparent" TextColor="#333" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center"/>
+                            <Button Grid.Column="2" Text="❮" Clicked="OnPrevYearClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
+                        </Grid>
 
-                    <!-- Days Header -->
-                    <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                        <Label Text="ش" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="1" Text="ی" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="2" Text="د" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="3" Text="س" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="4" Text="چ" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="5" Text="پ" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                        <Label Grid.Column="6" Text="ج" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
-                    </Grid>
+                        <!-- Month Navigation -->
+                        <Grid ColumnDefinitions="40,*,40">
+                            <Button Grid.Column="0" Text="❯" Clicked="OnNextMonthClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
+                            <Label Grid.Column="1" x:Name="CurrentMonthLabel" Text="ماه جاری" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
+                            <Button Grid.Column="2" Text="❮" Clicked="OnPrevMonthClicked" BackgroundColor="#F5F5F5" TextColor="#512BD4" FontSize="18" FontAttributes="Bold" Padding="0" HeightRequest="40" WidthRequest="40" CornerRadius="20"/>
+                        </Grid>
 
-                    <!-- Calendar Grid -->
-                    <Grid x:Name="CalendarGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*,*,*,*,*" RowSpacing="5" ColumnSpacing="5">
-                        <!-- Days will be added dynamically -->
-                    </Grid>
+                        <!-- Days Header -->
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                            <Label Text="ش" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="1" Text="ی" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="2" Text="د" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="3" Text="س" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="4" Text="چ" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="5" Text="پ" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                            <Label Grid.Column="6" Text="ج" HorizontalOptions="Center" TextColor="#888" FontSize="12"/>
+                        </Grid>
 
-                    <!-- Selected Date Stats -->
-                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="#F5F5F5" StrokeThickness="0" Padding="10" Margin="0,10,0,0">
+                        <!-- Calendar Grid -->
+                        <Grid x:Name="CalendarGrid" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*,*,*,*,*" RowSpacing="5" ColumnSpacing="5">
+                            <!-- Days will be added dynamically -->
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Selected Date Stats (Always Visible if filtered) -->
+                    <Border x:Name="StatsContainer" StrokeShape="RoundRectangle 10" BackgroundColor="#F5F5F5" StrokeThickness="0" Padding="10" Margin="0,5,0,0">
                         <Grid ColumnDefinitions="*,*">
                             <VerticalStackLayout Grid.Column="0" Spacing="2">
                                 <Label Text="درآمد" HorizontalOptions="Center" TextColor="#2E7D32" FontSize="12"/>
