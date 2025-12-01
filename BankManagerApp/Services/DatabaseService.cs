@@ -5,7 +5,7 @@ namespace BankManagerApp.Services
 {
     public static class Constants
     {
-        public const string DatabaseFilename = "namakdoon.db3";
+        public const string DatabaseFilename = "bankmanager.db";
 
         public const SQLite.SQLiteOpenFlags Flags =
             SQLite.SQLiteOpenFlags.ReadWrite |
@@ -13,7 +13,7 @@ namespace BankManagerApp.Services
             SQLite.SQLiteOpenFlags.SharedCache;
 
         public static string DatabasePath =>
-            Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DatabaseFilename);
     }
 
     public class DatabaseService
