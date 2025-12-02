@@ -1,4 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using BankManager.Data;
+using BankManagerApp.Services;
+using BankManagerApp.Views;
+using BankManagerApp.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankManagerApp;
 
@@ -18,6 +23,23 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+		builder.Services.AddDbContext<BankDbContext>(options =>
+		{
+			var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			var dbPath = Path.Combine(folder, "bankmanager.db");
+			options.UseSqlite($"Data Source={dbPath}");
+		});
+
+		builder.Services.AddTransient<DatabaseService>();
+
+		// Register Pages and ViewModels
+		builder.Services.AddTransient<MainPage>();
+		builder.Services.AddTransient<MainViewModel>();
+		builder.Services.AddTransient<AccountDetailPage>();
+		builder.Services.AddTransient<AccountDetailViewModel>();
+		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<RegisterPage>();
 
 		return builder.Build();
 	}

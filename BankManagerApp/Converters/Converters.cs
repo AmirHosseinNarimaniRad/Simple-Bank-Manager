@@ -1,5 +1,5 @@
 using System.Globalization;
-using BankManagerApp.Models;
+using BankManager.Data.Entities;
 
 namespace BankManagerApp.Converters
 {

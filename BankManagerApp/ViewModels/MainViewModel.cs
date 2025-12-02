@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using BankManagerApp.Models;
+using BankManager.Data.Entities;
 using BankManagerApp.Views;
 
 namespace BankManagerApp.ViewModels

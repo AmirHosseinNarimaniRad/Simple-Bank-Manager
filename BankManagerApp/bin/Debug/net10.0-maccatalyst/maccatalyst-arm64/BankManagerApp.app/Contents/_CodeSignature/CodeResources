@@ -12,6 +12,10 @@
 		<data>
 		I/tpFR8eD0ZgSLBpqiPuE0i53H4=
 		</data>
+		<key>Resources/MauiInfo.plist</key>
+		<data>
+		iEtuUGCV6JM3gxS/pO33swhmpp8=
+		</data>
 		<key>Resources/MonoTouchDebugConfiguration.txt</key>
 		<data>
 		oowkf1sL6T19nanXUObgmuayWqM=
@@ -47,18 +51,340 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>MonoBundle/BankManager.Data.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/8KjPkQyr2D/HU27ZR/DmsXKQGR1MTUAHcv8OkLbQnM=
+			</data>
+		</dict>
+		<key>MonoBundle/BankManager.Data.pdb</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			qAFI3A9TSiG+nPXaXKck1MqaKi3lCx5G8eHgOAqoz3c=
+			</data>
+		</dict>
 		<key>MonoBundle/BankManagerApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			n8zlQqeKrjmLRTDN7vzCdt0XWFNiiz/jEYuEvZNXF/k=
+			BwYRdwevJmOF9Cp4zsjhcrBjbNBlblonyePWjobz3Rg=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManagerApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			sHnzxfJ9zxJOOpB2ltdbDPEsTxPndmN5kj9uX+2UKtw=
+			lPszU1aacE18vFczStFMtKxd4ZEJhuALL4kcLqIMyRQ=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/Microsoft.Build.Locator.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HUIiozhXxG8/DjyOWeKtwG9smNkHKALHz9jg39p0hHs=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vqJ685gLD9+/MCQj1VVTSYoCQfQ1JDVgJdR3kCupgvU=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Qxaenb/dTQbS1PD4nJeU1DRTsJa7muaidcXjc5OD2SU=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/Microsoft.IO.Redist.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bQsKSrb8pByXsJk/BTvI6l7pZaj/Wi7ULRUTFjN1LV8=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/Newtonsoft.Json.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vLHdI9VU06TheywPCHYfxXGFfeNykbm92MkXiL46qEI=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Buffers.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rMzPvkXZ8I/+7ZkW43sz6YxlvgEs//bn+ntnIQzh/vs=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Collections.Immutable.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			d9cF/lHyJNd7JfwG7eOeKSHwi0apYaAn1u5JpLsZwSc=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.CommandLine.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			70vEWFASjiNRva51rnNqYqK6Dmo9ynW1qL8rC8ferD0=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Memory.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vz+4RmT0CX8aipvHGlHc+M8akF1AgKTSkNoXMIZuhW8=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Numerics.Vectors.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HT74aYKB589zcdFVSv71hys5+Wwm2nciEKM9oEG6EYM=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Runtime.CompilerServices.Unsafe.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			N3aEiOjvRXKbx9miZ3YzxkUAQpdbuWUW4YbabLnNDc8=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/System.Threading.Tasks.Extensions.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			T4H/0NxyBNt1r8NepCkXabB8RAWS8oiUJg7qdmJqI8Y=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/cs/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BhPmPeoN/Ea4oJDuQcoKyTkC/fh2EH/hFml/V/+Zfss=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/de/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			b3fofN1XKdqO+fT33tFCRmetgXEeD/gMJkcHpSLaq2o=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/es/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mdbPsqY5vsQcdV36GULKQrI+MnJBE5JGjV0hzoWC2qg=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/fr/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			P1t2Fkd6eSsfWLggUnurC4W2ITmL8CeEA2jVMlxE4Vg=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/it/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cLHNIyIeX0Z7s51e3ls7Zmh2agpllCglSyCNWTBSjGc=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/ja/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pg8bG3O/gifa/LH9GHWAydywXSbM/A0PzeGmhOXHtfs=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/ko/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FMc4xcISh+MjIDJWW+a7RczfqBvK/hTL0uwn/KYLK/I=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/pl/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			KdKNwFOutdLDIPFTMb5MfvpMsWQ+X46tkqLhRevZLis=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/pt-BR/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			f/tHxBCQ17nk2i8sdFV8GGYEgi6QS/ApaDsrVldGr5Y=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/ru/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zaDTX2H11gsp9rLdi6irj2Ww74l23wTwZX+Qwb1XJZI=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/tr/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BvEqc3PRfY5McNrS08G4KAppJC05vi6GxpHggZMGp9g=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/zh-Hans/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pMFoxqc9l1XdxyxUG6a8zMGqKoBAuE4+rhkA4j2XUuE=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-net472/zh-Hant/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2ss7Ql+v9ix7wYVOJ6uBM6KKpKipgYW78GwLJP2CBGo=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/Microsoft.Build.Locator.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CtvmXYe6/Ebprn+9TcQK2gUxXF3eZwnu9XgjP7P09io=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VUK2hlcn0220MsY8GjR5XPuARyspJYMF+3hv2jgpehI=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll.config</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			c7mogMObTycT+lEY4yIkiN0E4SRifTFmMrqn7ydpExI=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/Newtonsoft.Json.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			JlsIbhmOLIRzqvDSvwq2EjAiQxpuieGB6ddb3NFzW+A=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/System.Collections.Immutable.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			R0PkKyjxz7ycN7USG8blXmMNNq+0wtCtPDENryxWrTc=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/System.CommandLine.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			70vEWFASjiNRva51rnNqYqK6Dmo9ynW1qL8rC8ferD0=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/cs/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BhPmPeoN/Ea4oJDuQcoKyTkC/fh2EH/hFml/V/+Zfss=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/de/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			b3fofN1XKdqO+fT33tFCRmetgXEeD/gMJkcHpSLaq2o=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/es/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mdbPsqY5vsQcdV36GULKQrI+MnJBE5JGjV0hzoWC2qg=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/fr/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			P1t2Fkd6eSsfWLggUnurC4W2ITmL8CeEA2jVMlxE4Vg=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/it/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cLHNIyIeX0Z7s51e3ls7Zmh2agpllCglSyCNWTBSjGc=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/ja/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pg8bG3O/gifa/LH9GHWAydywXSbM/A0PzeGmhOXHtfs=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/ko/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FMc4xcISh+MjIDJWW+a7RczfqBvK/hTL0uwn/KYLK/I=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/pl/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			KdKNwFOutdLDIPFTMb5MfvpMsWQ+X46tkqLhRevZLis=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/pt-BR/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			f/tHxBCQ17nk2i8sdFV8GGYEgi6QS/ApaDsrVldGr5Y=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/ru/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zaDTX2H11gsp9rLdi6irj2Ww74l23wTwZX+Qwb1XJZI=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/tr/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BvEqc3PRfY5McNrS08G4KAppJC05vi6GxpHggZMGp9g=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/zh-Hans/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pMFoxqc9l1XdxyxUG6a8zMGqKoBAuE4+rhkA4j2XUuE=
+			</data>
+		</dict>
+		<key>MonoBundle/BuildHost-netcore/zh-Hant/System.CommandLine.resources.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2ss7Ql+v9ix7wYVOJ6uBM6KKpKipgYW78GwLJP2CBGo=
 			</data>
 		</dict>
 		<key>MonoBundle/Microsoft.CSharp.dll</key>
@@ -66,6 +392,55 @@
 			<key>hash2</key>
 			<data>
 			B5c3YF01O3X9d/Gqioum7gf/w1K8NwqFIyCz2cjyUzI=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.Data.Sqlite.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Hfvw57wKzo+dQRq9vGQ2LVIlvfU61oREt5KvNaxhHik=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.EntityFrameworkCore.Abstractions.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zna86dzAb8biLWxKvrtOqBagB5sQSFxcCA1uqfD9gY4=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.EntityFrameworkCore.Relational.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			aIA/oKcdSp1YMl3d4dFwlFEJSiCwHL2ztz1p9C0RUZc=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.EntityFrameworkCore.Sqlite.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ZYYIIDFXCEPIKc5iYLBJZalHUQB75aYbW0fARgqnQAo=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.EntityFrameworkCore.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			eFquv/KKza/ID0/Sp1ITkrtnr9gGm4mzqo18Vif0nGA=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.Extensions.Caching.Abstractions.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Wrbw38dorr++kkNZmvNSUU8uZlA0UnGwB7dQrz/RTC8=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.Extensions.Caching.Memory.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			n6vVR1Gu8XwdCWrUGvmdUCxo48fukV8akzas3MNViO0=
 			</data>
 		</dict>
 		<key>MonoBundle/Microsoft.Extensions.Configuration.Abstractions.dll</key>
@@ -94,6 +469,13 @@
 			<key>hash2</key>
 			<data>
 			1kalzKXoEWrka0NxUpcIP6ijjbY26rYOZu7vNQ10zV0=
+			</data>
+		</dict>
+		<key>MonoBundle/Microsoft.Extensions.DependencyModel.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DX+uMGhGVPqRc60kirQbcTpI2B3w70Ru5OQMjTgIk+g=
 			</data>
 		</dict>
 		<key>MonoBundle/Microsoft.Extensions.Diagnostics.Abstractions.dll</key>
@@ -229,18 +611,11 @@
 			qTqYRQM/AsN6MFuU6FTPkoGk+1BpDlJjTg+yGnCYxLs=
 			</data>
 		</dict>
-		<key>MonoBundle/SQLite-net.dll</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			/0h0FMSssyqe6OCqk97walP3tX35PS56JgVOGN+Fcj4=
-			</data>
-		</dict>
 		<key>MonoBundle/SQLitePCLRaw.batteries_v2.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			gszoDBXO4Dwor1Scp/WrnWq3s6EMynck+sVXomAOlrI=
+			lKyADGuTrlCgJfJHVHeB3r4YOREQZnxeJC9R2KwYj/s=
 			</data>
 		</dict>
 		<key>MonoBundle/SQLitePCLRaw.core.dll</key>
@@ -1619,7 +1994,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/AVw5gJwPJnYK5roVnWKdvS9SvdnWVEKw2qoE+K9ESY=
+			lkykG8NYC/h0fiSsldm76HNOkSEApSOQTtCtborecPE=
 			</data>
 		</dict>
 		<key>MonoBundle/sk/Microsoft.Maui.Controls.resources.dll</key>
@@ -1697,6 +2072,13 @@
 			<key>hash2</key>
 			<data>
 			Twk701A9SjA+XA7IQHhPkd8fUdKsd3o+sOyr7WYSJNg=
+			</data>
+		</dict>
+		<key>Resources/MauiInfo.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tx0KXqEC+DvcCGyogQTEQWHcCWJYYqH24NtPwhpQEjo=
 			</data>
 		</dict>
 		<key>Resources/MonoTouchDebugConfiguration.txt</key>

@@ -1,4 +1,4 @@
-using BankManagerApp.Models;
+using BankManager.Data.Entities;
 using BankManagerApp.Services;
 using Microsoft.Maui.Controls.Shapes;
 
@@ -7,14 +7,16 @@ namespace BankManagerApp.Views
     public partial class MainPage : ContentPage
     {
         private readonly DatabaseService _database;
+        private readonly IServiceProvider _serviceProvider;
         private List<Wallet>? _accounts;
 
-        public MainPage()
+        public MainPage(DatabaseService database, IServiceProvider serviceProvider)
         {
             try
             {
                 InitializeComponent();
-                _database = new DatabaseService();
+                _database = database;
+                _serviceProvider = serviceProvider;
                 Console.WriteLine("MainPage: Constructor completed");
             }
             catch (Exception ex)
@@ -167,7 +169,7 @@ namespace BankManagerApp.Views
                         var tapGesture = new TapGestureRecognizer();
                         tapGesture.Tapped += async (s, e) =>
                         {
-                            var detailPage = new AccountDetailPage();
+                            var detailPage = _serviceProvider.GetRequiredService<AccountDetailPage>();
                             detailPage.AccountId = wallet.Id;
                             await Navigation.PushAsync(detailPage);
                         };
@@ -205,8 +207,8 @@ namespace BankManagerApp.Views
                     {
                         UserId = userId,
                         Name = accountName,
-                        Balance = 0,
-                        CreatedAt = DateTime.Now
+                        Balance = 0
+                        // CreatedAt and UpdatedAt will be set automatically by BankDbContext
                     };
 
                     await _database.SaveWalletAsync(newAccount);

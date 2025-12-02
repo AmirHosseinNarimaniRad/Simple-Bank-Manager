@@ -1,15 +1,19 @@
+using BankManager.Data.Entities;
 using BankManagerApp.Services;
+using Microsoft.Extensions.DependencyInjection; // Added for GetRequiredService
 
 namespace BankManagerApp.Views
 {
     public partial class LoginPage : ContentPage
     {
         private readonly DatabaseService _database;
+        private readonly IServiceProvider _serviceProvider;
 
-        public LoginPage()
+        public LoginPage(DatabaseService database, IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            _database = new DatabaseService();
+            _database = database;
+            _serviceProvider = serviceProvider;
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
@@ -43,7 +47,8 @@ namespace BankManagerApp.Views
 
         private async void OnRegisterTapped(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new RegisterPage());
+            var registerPage = _serviceProvider.GetRequiredService<RegisterPage>();
+            await Navigation.PushAsync(registerPage);
         }
 
         private void ShowError(string message)

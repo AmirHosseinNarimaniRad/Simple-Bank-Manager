@@ -1,4 +1,4 @@
-using BankManagerApp.Models;
+using BankManager.Data.Entities;
 using BankManagerApp.Services;
 
 namespace BankManagerApp.Views
@@ -7,10 +7,10 @@ namespace BankManagerApp.Views
     {
         private readonly DatabaseService _database;
 
-        public RegisterPage()
+        public RegisterPage(DatabaseService database)
         {
             InitializeComponent();
-            _database = new DatabaseService();
+            _database = database;
         }
 
         private async void OnRegisterClicked(object sender, EventArgs e)

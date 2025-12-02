@@ -1,5 +1,7 @@
-using BankManagerApp.Models;
+using System.Collections.ObjectModel;
+using BankManager.Data.Entities;
 using BankManagerApp.Services;
+using BankManagerApp.ViewModels;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace BankManagerApp.Views
@@ -9,7 +11,7 @@ namespace BankManagerApp.Views
     {
         private readonly DatabaseService _database;
         private Wallet _account;
-        private List<TransactionDb> _transactions;
+        private ObservableCollection<TransactionDb> _transactions;
         private string _currentTransactionType = "Income"; // "Income" or "Expense"
         
         // Calendar Fields
@@ -27,10 +29,10 @@ namespace BankManagerApp.Views
             }
         }
 
-        public AccountDetailPage()
+        public AccountDetailPage(DatabaseService database)
         {
             InitializeComponent();
-            _database = new DatabaseService();
+            _database = database;
             
             // Initialize Calendar
             _persianCalendar = new System.Globalization.PersianCalendar();
@@ -40,8 +42,8 @@ namespace BankManagerApp.Views
             _selectedDate = null;
             _isYearView = false;
 
-            UpdateTransactionTypeUI();
-            RenderCalendar();
+            // Don't call UpdateTransactionTypeUI or RenderCalendar here
+            // They will be called after LoadAccount when UI is ready
         }
 
         private async void LoadAccount(int accountId)
@@ -51,6 +53,8 @@ namespace BankManagerApp.Views
             {
                 AccountNameLabel.Text = _account.Name;
                 UpdateBalance();
+                UpdateTransactionTypeUI(); // Set up transaction type UI
+                RenderCalendar(); // Render calendar after account is loaded
                 await LoadTransactions();
             }
         }
@@ -68,22 +72,23 @@ namespace BankManagerApp.Views
             if (_account != null)
             {
                 var allTransactions = await _database.GetTransactionsAsync(_account.Id);
+                List<TransactionDb> filteredTransactions;
                 
                 // Filter by Date
                 if (_selectedDate.HasValue)
                 {
                     // Filter by specific day
-                    _transactions = allTransactions.Where(t => t.DateTime.Date == _selectedDate.Value.Date).ToList();
+                    filteredTransactions = allTransactions.Where(t => t.DateTime.Date == _selectedDate.Value.Date).ToList();
                 }
                 else if (_isYearView)
                 {
                     // Filter by current year
-                    _transactions = allTransactions.Where(t => _persianCalendar.GetYear(t.DateTime) == _currentYear).ToList();
+                    filteredTransactions = allTransactions.Where(t => _persianCalendar.GetYear(t.DateTime) == _currentYear).ToList();
                 }
                 else
                 {
                     // Filter by current month
-                    _transactions = allTransactions.Where(t => 
+                    filteredTransactions = allTransactions.Where(t => 
                     {
                         var pYear = _persianCalendar.GetYear(t.DateTime);
                         var pMonth = _persianCalendar.GetMonth(t.DateTime);
@@ -92,7 +97,9 @@ namespace BankManagerApp.Views
                 }
                 
                 // Sort by date descending (newest first)
-                _transactions = _transactions.OrderByDescending(t => t.DateTime).ToList();
+                filteredTransactions = filteredTransactions.OrderByDescending(t => t.DateTime).ToList();
+                
+                _transactions = new ObservableCollection<TransactionDb>(filteredTransactions);
                 
                 BindableLayout.SetItemsSource(TransactionsContainer, _transactions);
                 
@@ -120,6 +127,13 @@ namespace BankManagerApp.Views
 
         private void UpdateTransactionTypeUI()
         {
+            // Check if UI elements are ready
+            if (IncomeTab == null || ExpenseTab == null || CategoryPicker == null)
+            {
+                Console.WriteLine("UpdateTransactionTypeUI: UI elements not ready");
+                return;
+            }
+
             if (_currentTransactionType == "Income")
             {
                 IncomeTab.BackgroundColor = Color.FromArgb("#E8F5E9");
@@ -203,82 +217,140 @@ namespace BankManagerApp.Views
         // Calendar Methods
         private void RenderCalendar()
         {
-            CalendarGrid.Children.Clear();
-            
-            // Update Labels
-            string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
-            CurrentMonthLabel.Text = monthNames[_currentMonth - 1];
-            CurrentYearLabel.Text = _currentYear.ToString();
-
-            // Highlight Year Label if in Year View
-            if (_isYearView)
+            try
             {
-                CurrentYearLabel.TextColor = Color.FromArgb("#512BD4");
-                CurrentYearLabel.BackgroundColor = Color.FromArgb("#E8EAF6");
-            }
-            else
-            {
-                CurrentYearLabel.TextColor = Color.FromArgb("#333");
-                CurrentYearLabel.BackgroundColor = Colors.Transparent;
-            }
-
-            // Get first day of the month
-            DateTime firstDayOfMonth = _persianCalendar.ToDateTime(_currentYear, _currentMonth, 1, 0, 0, 0, 0);
-            DayOfWeek startDayOfWeek = _persianCalendar.GetDayOfWeek(firstDayOfMonth);
-            
-            // Calculate offset (Saturday = 0, Sunday = 1, ...)
-            int startCol = (int)startDayOfWeek + 1;
-            if (startCol == 7) startCol = 0;
-
-            int daysInMonth = _persianCalendar.GetDaysInMonth(_currentYear, _currentMonth);
-
-            for (int day = 1; day <= daysInMonth; day++)
-            {
-                int row = (day + startCol - 1) / 7;
-                int col = (day + startCol - 1) % 7;
-
-                var dayButton = new Button
+                if (CalendarGrid == null || CurrentMonthLabel == null || CurrentYearLabel == null)
                 {
-                    Text = day.ToString(),
-                    BackgroundColor = Colors.Transparent,
-                    TextColor = Color.FromArgb("#333"),
-                    CornerRadius = 20,
-                    WidthRequest = 40,
-                    HeightRequest = 40,
-                    Padding = 0,
-                    FontSize = 14
-                };
+                    Console.WriteLine("RenderCalendar: UI elements not ready");
+                    return;
+                }
 
-                // Highlight selected day
-                DateTime thisDate = _persianCalendar.ToDateTime(_currentYear, _currentMonth, day, 0, 0, 0, 0);
+                // Validate year and month
+                if (_currentYear < 1300 || _currentYear > 1500)
+                {
+                    Console.WriteLine($"Invalid year: {_currentYear}, resetting to current");
+                    DateTime now = DateTime.Now;
+                    _currentYear = _persianCalendar.GetYear(now);
+                    _currentMonth = _persianCalendar.GetMonth(now);
+                }
                 
-                // Check if it is Today
-                bool isToday = thisDate.Date == DateTime.Now.Date;
-
-                if (_selectedDate.HasValue && _selectedDate.Value.Date == thisDate.Date)
+                if (_currentMonth < 1 || _currentMonth > 12)
                 {
-                    // Selected Day Style
-                    dayButton.BackgroundColor = Color.FromArgb("#512BD4");
-                    dayButton.TextColor = Colors.White;
-                }
-                else if (isToday)
-                {
-                    // Today Style (Distinct Highlight)
-                    dayButton.BackgroundColor = Color.FromArgb("#E3F2FD"); // Light Blue
-                    dayButton.TextColor = Color.FromArgb("#1565C0"); // Dark Blue
-                    dayButton.BorderColor = Color.FromArgb("#1565C0");
-                    dayButton.BorderWidth = 1;
-                    dayButton.FontAttributes = FontAttributes.Bold;
+                    Console.WriteLine($"Invalid month: {_currentMonth}, resetting to 1");
+                    _currentMonth = 1;
                 }
 
-                dayButton.Clicked += (s, e) => OnDayClicked(thisDate);
+                CalendarGrid.Children.Clear();
+                
+                // Update Labels
+                string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
+                CurrentMonthLabel.Text = monthNames[_currentMonth - 1];
+                CurrentYearLabel.Text = _currentYear.ToString();
 
-                Grid.SetRow(dayButton, row);
-                Grid.SetColumn(dayButton, col);
-                CalendarGrid.Children.Add(dayButton);
+                // Highlight Year Label if in Year View
+                if (_isYearView)
+                {
+                    CurrentYearLabel.TextColor = Color.FromArgb("#512BD4");
+                    CurrentYearLabel.BackgroundColor = Color.FromArgb("#E8EAF6");
+                }
+                else
+                {
+                    CurrentYearLabel.TextColor = Color.FromArgb("#333");
+                    CurrentYearLabel.BackgroundColor = Colors.Transparent;
+                }
+
+                // Get first day of the month - with error handling
+                DateTime firstDayOfMonth;
+                try
+                {
+                    firstDayOfMonth = _persianCalendar.ToDateTime(_currentYear, _currentMonth, 1, 0, 0, 0, 0);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.WriteLine($"Invalid Persian date: Year={_currentYear}, Month={_currentMonth}");
+                    Console.WriteLine($"Error: {ex.Message}");
+                    // Reset to current date
+                    DateTime now = DateTime.Now;
+                    _currentYear = _persianCalendar.GetYear(now);
+                    _currentMonth = _persianCalendar.GetMonth(now);
+                    firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+                }
+
+                DayOfWeek startDayOfWeek = _persianCalendar.GetDayOfWeek(firstDayOfMonth);
+                
+                // Calculate offset (Saturday = 0, Sunday = 1, ...)
+                int startCol = (int)startDayOfWeek + 1;
+                if (startCol == 7) startCol = 0;
+
+                int daysInMonth = _persianCalendar.GetDaysInMonth(_currentYear, _currentMonth);
+
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    int row = (day + startCol - 1) / 7;
+                    int col = (day + startCol - 1) % 7;
+
+                    var dayButton = new Button
+                    {
+                        Text = day.ToString(),
+                        BackgroundColor = Colors.Transparent,
+                        TextColor = Color.FromArgb("#333"),
+                        CornerRadius = 20,
+                        WidthRequest = 40,
+                        HeightRequest = 40,
+                        Padding = 0,
+                        FontSize = 14
+                    };
+
+                    // Highlight selected day - with error handling
+                    DateTime thisDate;
+                    try
+                    {
+                        thisDate = _persianCalendar.ToDateTime(_currentYear, _currentMonth, day, 0, 0, 0, 0);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        // Skip invalid dates
+                        Console.WriteLine($"Skipping invalid date: {_currentYear}/{_currentMonth}/{day}");
+                        continue;
+                    }
+                    
+                    // Check if it is Today
+                    bool isToday = thisDate.Date == DateTime.Now.Date;
+
+                    if (_selectedDate.HasValue && _selectedDate.Value.Date == thisDate.Date)
+                    {
+                        // Selected Day Style
+                        dayButton.BackgroundColor = Color.FromArgb("#512BD4");
+                        dayButton.TextColor = Colors.White;
+                    }
+                    else if (isToday)
+                    {
+                        // Today Style (Distinct Highlight)
+                        dayButton.BackgroundColor = Color.FromArgb("#E3F2FD"); // Light Blue
+                        dayButton.TextColor = Color.FromArgb("#1565C0"); // Dark Blue
+                        dayButton.BorderColor = Color.FromArgb("#1565C0");
+                        dayButton.BorderWidth = 1;
+                        dayButton.FontAttributes = FontAttributes.Bold;
+                    }
+
+                    dayButton.Clicked += (s, e) => OnDayClicked(thisDate);
+
+                    Grid.SetRow(dayButton, row);
+                    Grid.SetColumn(dayButton, col);
+                    CalendarGrid.Children.Add(dayButton);
+                }
+                
+                UpdateStats();
             }
-            
-            UpdateStats();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"RenderCalendar ERROR: {ex.Message}");
+                Console.WriteLine($"Year: {_currentYear}, Month: {_currentMonth}");
+                // Reset to current date if there's an error
+                DateTime now = DateTime.Now;
+                _currentYear = _persianCalendar.GetYear(now);
+                _currentMonth = _persianCalendar.GetMonth(now);
+            }
         }
 
         private void OnNextMonthClicked(object sender, EventArgs e)
