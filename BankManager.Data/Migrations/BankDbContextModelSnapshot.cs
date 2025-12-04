@@ -43,7 +43,6 @@ namespace BankManager.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IncomeType")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")

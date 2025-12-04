@@ -12,7 +12,7 @@ namespace BankManagerApp.Views
         private readonly DatabaseService _database;
         private Wallet _account;
         private ObservableCollection<TransactionDb> _transactions;
-        private string _currentTransactionType = "Income"; // "Income" or "Expense"
+        private string _currentTransactionType = "Deposit"; // "Deposit" or "Withdraw"
         
         // Calendar Fields
         private System.Globalization.PersianCalendar _persianCalendar;
@@ -119,11 +119,11 @@ namespace BankManagerApp.Views
                 // Check button text to determine type
                 if (button.Text.Contains("واریز"))
                 {
-                    _currentTransactionType = "Income";
+                    _currentTransactionType = "Deposit";
                 }
                 else if (button.Text.Contains("هزینه"))
                 {
-                    _currentTransactionType = "Expense";
+                    _currentTransactionType = "Withdraw";
                 }
                 
                 Console.WriteLine($"Transaction type changed to: {_currentTransactionType}");
@@ -140,7 +140,7 @@ namespace BankManagerApp.Views
                 return;
             }
 
-            if (_currentTransactionType == "Income")
+            if (_currentTransactionType == "Deposit")
             {
                 IncomeTab.BackgroundColor = Color.FromArgb("#E8F5E9");
                 IncomeTab.TextColor = Color.FromArgb("#2E7D32");
@@ -167,11 +167,8 @@ namespace BankManagerApp.Views
 
             if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
             {
-                // Determine transaction type from button UI state
-                bool isIncome = IncomeTab.BackgroundColor.Equals(Color.FromArgb("#E8F5E9"));
-                
                 // Update Balance
-                if (isIncome)
+                if (_currentTransactionType == "Deposit")
                     _account.Balance += amount;
                 else
                     _account.Balance -= amount;
@@ -182,9 +179,9 @@ namespace BankManagerApp.Views
                 var transaction = new TransactionDb
                 {
                     AccountId = _account.Id,
-                    Type = isIncome ? "Deposit" : "Withdraw",
+                    Type = _currentTransactionType,  // "Deposit" or "Withdraw"
                     Category = CategoryPicker.SelectedItem?.ToString() ?? "سایر",
-                    IncomeType = isIncome ? CategoryPicker.SelectedItem?.ToString() : null,
+                    IncomeType = _currentTransactionType == "Deposit" ? CategoryPicker.SelectedItem?.ToString() : null,
                     Amount = amount,
                     Description = DescriptionEntry.Text,
                     DateTime = DateTime.Now
