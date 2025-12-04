@@ -12,10 +12,6 @@
 		<data>
 		I/tpFR8eD0ZgSLBpqiPuE0i53H4=
 		</data>
-		<key>Resources/MauiInfo.plist</key>
-		<data>
-		iEtuUGCV6JM3gxS/pO33swhmpp8=
-		</data>
 		<key>Resources/MonoTouchDebugConfiguration.txt</key>
 		<data>
 		oowkf1sL6T19nanXUObgmuayWqM=
@@ -55,28 +51,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/8KjPkQyr2D/HU27ZR/DmsXKQGR1MTUAHcv8OkLbQnM=
+			St+YiPINIdm9ck6yepwcHVoMoLBaQejFRA65TceImyc=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManager.Data.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			qAFI3A9TSiG+nPXaXKck1MqaKi3lCx5G8eHgOAqoz3c=
+			CIEq42nV3Ydd34ZUYJCaTz19+c0CADp95WFEH4hZ5Zk=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManagerApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BwYRdwevJmOF9Cp4zsjhcrBjbNBlblonyePWjobz3Rg=
+			CgTIuUOj4Aul/zyrzHJwsCJiQQ9Qi4p/uVOmfqCnvJ0=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManagerApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lPszU1aacE18vFczStFMtKxd4ZEJhuALL4kcLqIMyRQ=
+			fGx65RgVv7Lu87FYpRI5Pg6lWXeeCnlnbRS8cjBIRbg=
 			</data>
 		</dict>
 		<key>MonoBundle/BuildHost-net472/Microsoft.Build.Locator.dll</key>
@@ -2072,13 +2068,6 @@
 			<key>hash2</key>
 			<data>
 			Twk701A9SjA+XA7IQHhPkd8fUdKsd3o+sOyr7WYSJNg=
-			</data>
-		</dict>
-		<key>Resources/MauiInfo.plist</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			tx0KXqEC+DvcCGyogQTEQWHcCWJYYqH24NtPwhpQEjo=
 			</data>
 		</dict>
 		<key>Resources/MonoTouchDebugConfiguration.txt</key>

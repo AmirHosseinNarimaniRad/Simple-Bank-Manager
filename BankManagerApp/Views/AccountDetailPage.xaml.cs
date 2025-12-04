@@ -114,13 +114,19 @@ namespace BankManagerApp.Views
 
         private void OnTransactionTypeChanged(object sender, EventArgs e)
         {
-            if (sender == IncomeTab)
+            if (sender is Button button)
             {
-                _currentTransactionType = "Income";
-            }
-            else if (sender == ExpenseTab)
-            {
-                _currentTransactionType = "Expense";
+                // Check button text to determine type
+                if (button.Text.Contains("واریز"))
+                {
+                    _currentTransactionType = "Income";
+                }
+                else if (button.Text.Contains("هزینه"))
+                {
+                    _currentTransactionType = "Expense";
+                }
+                
+                Console.WriteLine($"Transaction type changed to: {_currentTransactionType}");
             }
             UpdateTransactionTypeUI();
         }
@@ -161,11 +167,11 @@ namespace BankManagerApp.Views
 
             if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
             {
-                // REMOVED: Balance check - allow negative balance
-                // This allows users to track overspending
-
+                // Determine transaction type from button UI state
+                bool isIncome = IncomeTab.BackgroundColor.Equals(Color.FromArgb("#E8F5E9"));
+                
                 // Update Balance
-                if (_currentTransactionType == "Income")
+                if (isIncome)
                     _account.Balance += amount;
                 else
                     _account.Balance -= amount;
@@ -176,13 +182,14 @@ namespace BankManagerApp.Views
                 var transaction = new TransactionDb
                 {
                     AccountId = _account.Id,
-                    Type = _currentTransactionType == "Income" ? "Deposit" : "Withdraw",
+                    Type = isIncome ? "Deposit" : "Withdraw",
                     Category = CategoryPicker.SelectedItem?.ToString() ?? "سایر",
-                    IncomeType = _currentTransactionType == "Income" ? CategoryPicker.SelectedItem?.ToString() : null,
+                    IncomeType = isIncome ? CategoryPicker.SelectedItem?.ToString() : null,
                     Amount = amount,
                     Description = DescriptionEntry.Text,
                     DateTime = DateTime.Now
                 };
+                
                 await _database.SaveTransactionAsync(transaction);
 
                 // UI Feedback

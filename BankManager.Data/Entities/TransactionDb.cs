@@ -13,7 +13,7 @@ namespace BankManager.Data.Entities
         public string Category { get; set; } // e.g., Food, Taxi, etc.
         public string IncomeType { get; set; } // e.g., Salary, Cash, etc.
         public decimal Amount { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public DateTime DateTime { get; set; } // Transaction Date
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

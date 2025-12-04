@@ -232,7 +232,8 @@ namespace BankManagerApp.Views
             catch (Exception ex)
             {
                 Console.WriteLine($"OnCreateAccountClicked CRASH: {ex}");
-                await DisplayAlert("خطا", $"مشکل: {ex.Message}", "باشه");
+                var message = ex.InnerException != null ? $"{ex.Message}\n\nInner: {ex.InnerException.Message}" : ex.Message;
+                await DisplayAlert("خطا", $"مشکل: {message}", "باشه");
             }
         }
 
