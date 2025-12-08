@@ -1,19 +1,17 @@
+using BankManager.Data.Enums;
 using System.Globalization;
-using BankManager.Data.Entities;
 
 namespace BankManagerApp.Converters
 {
-    public class TransactionColorConverter : IValueConverter
+    public class TransactionIconConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string type)
+            if (value is TransactionType type)
             {
-                return type == "Deposit" 
-                    ? Color.FromArgb("#4CAF50")  // Green
-                    : Color.FromArgb("#FF5722");  // Red
+                return type == TransactionType.Deposit ? "💰" : "💸";
             }
-            return Colors.Gray;
+            return "❓";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -22,15 +20,15 @@ namespace BankManagerApp.Converters
         }
     }
 
-    public class TransactionIconConverter : IValueConverter
+    public class TransactionColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string type)
+            if (value is TransactionType type)
             {
-                return type == "Deposit" ? "⬇️" : "⬆️";
+                return type == TransactionType.Deposit ? Color.FromArgb("#2E7D32") : Color.FromArgb("#C62828");
             }
-            return "❓";
+            return Color.FromArgb("#999");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
