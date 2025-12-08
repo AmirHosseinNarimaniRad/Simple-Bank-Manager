@@ -77,6 +77,7 @@
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/zh-Hans/Microsoft.Maui.Controls.resources.dll
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/zh-Hant/Microsoft.Maui.Controls.resources.dll
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/runtimeconfig.bin
+/Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/BCrypt.Net-Next.dll
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/Microsoft.Data.Sqlite.dll
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/Microsoft.EntityFrameworkCore.dll
 /Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/publish/../BankManagerApp.app/Contents/MonoBundle/Microsoft.EntityFrameworkCore.Abstractions.dll

@@ -6,7 +6,7 @@ namespace BankManagerApp.Services
 {
     public class DatabaseService
     {
-        private readonly BankDbContext _context;
+        public readonly BankDbContext _context;
 
         public DatabaseService(BankDbContext context)
         {
@@ -25,14 +25,14 @@ namespace BankManagerApp.Services
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUserAsync(int id)
+        public async Task<User?> GetUserAsync(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<User> GetUserByPhoneAsync(string phoneNumber)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<int> SaveUserAsync(User user)
@@ -109,6 +109,44 @@ namespace BankManagerApp.Services
                 wallet.Balance += amount;
                 await SaveWalletAsync(wallet);
             }
+        }
+
+        // Category methods
+        public async Task<List<Category>> GetCategoriesAsync(BankManager.Data.Enums.TransactionType type)
+        {
+            return await _context.Categories
+                .Where(c => c.Type == type)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
+
+        public async Task<List<Category>> GetAllCategoriesAsync()
+        {
+            return await _context.Categories
+                .OrderBy(c => c.Type)
+                .ThenBy(c => c.Name)
+                .ToListAsync();
+        }
+
+        public async Task<Category?> GetCategoryAsync(int id)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<int> SaveCategoryAsync(Category category)
+        {
+            if (category.Id == 0)
+                _context.Categories.Add(category);
+            else
+                _context.Categories.Update(category);
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteCategoryAsync(Category category)
+        {
+            _context.Categories.Remove(category);
+            return await _context.SaveChangesAsync();
         }
     }
 }

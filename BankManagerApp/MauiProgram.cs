@@ -32,6 +32,7 @@ public static class MauiProgram
 		});
 
 		builder.Services.AddTransient<DatabaseService>();
+		builder.Services.AddSingleton<AuthService>();
 
 		// Register Pages and ViewModels
 		builder.Services.AddTransient<MainPage>();
@@ -40,6 +41,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<AccountDetailViewModel>();
 		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterPage>();
+		builder.Services.AddTransient<PasswordResetPage>();
 
 		return builder.Build();
 	}

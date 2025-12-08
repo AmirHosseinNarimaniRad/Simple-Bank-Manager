@@ -1,60 +1,66 @@
-using BankManager.Data.Entities;
 using BankManagerApp.Services;
-using Microsoft.Extensions.DependencyInjection; // Added for GetRequiredService
 
 namespace BankManagerApp.Views
 {
     public partial class LoginPage : ContentPage
     {
+        private readonly AuthService _authService;
         private readonly DatabaseService _database;
-        private readonly IServiceProvider _serviceProvider;
 
-        public LoginPage(DatabaseService database, IServiceProvider serviceProvider)
+        public LoginPage(AuthService authService, DatabaseService database)
         {
             InitializeComponent();
+            _authService = authService;
             _database = database;
-            _serviceProvider = serviceProvider;
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            ErrorLabel.IsVisible = false;
-
-            var phoneNumber = PhoneEntry.Text?.Trim();
-
-            if (string.IsNullOrWhiteSpace(phoneNumber))
+            try
             {
-                ShowError("Please enter your phone number");
-                return;
+                LoginButton.IsEnabled = false;
+                LoginButton.Text = "در حال ورود...";
+
+                var emailOrUsername = EmailUsernameEntry.Text?.Trim();
+                var password = PasswordEntry.Text;
+
+                if (string.IsNullOrWhiteSpace(emailOrUsername) || string.IsNullOrWhiteSpace(password))
+                {
+                    await DisplayAlert("خطا", "لطفاً تمام فیلدها را پر کنید", "باشه");
+                    return;
+                }
+
+                var (success, message, userId) = await _authService.LoginAsync(emailOrUsername, password);
+
+                if (success)
+                {
+                    _authService.SaveCurrentUserId(userId);
+                    Application.Current!.MainPage = new NavigationPage(new MainPage(_database));
+                }
+                else
+                {
+                    await DisplayAlert("خطا", message, "باشه");
+                }
             }
-
-            // Check if user exists
-            var user = await _database.GetUserByPhoneAsync(phoneNumber);
-
-            if (user == null)
+            catch (Exception ex)
             {
-                ShowError("User not found with this phone number");
-                return;
+                await DisplayAlert("خطا", $"خطای غیرمنتظره: {ex.Message}", "باشه");
             }
-
-            // Save current user ID in preferences
-            Preferences.Set("CurrentUserId", user.Id);
-            Preferences.Set("IsLoggedIn", true);
-
-            // Navigate to main page
-            Application.Current.MainPage = new AppShell();
+            finally
+            {
+                LoginButton.IsEnabled = true;
+                LoginButton.Text = "ورود";
+            }
         }
 
         private async void OnRegisterTapped(object sender, EventArgs e)
         {
-            var registerPage = _serviceProvider.GetRequiredService<RegisterPage>();
-            await Navigation.PushAsync(registerPage);
+            await Navigation.PushAsync(new RegisterPage(_authService, _database));
         }
 
-        private void ShowError(string message)
+        private async void OnForgotPasswordTapped(object sender, EventArgs e)
         {
-            ErrorLabel.Text = message;
-            ErrorLabel.IsVisible = true;
+            await Navigation.PushAsync(new PasswordResetPage(_authService));
         }
     }
 }

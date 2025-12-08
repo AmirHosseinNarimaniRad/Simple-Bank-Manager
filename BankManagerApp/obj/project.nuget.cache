@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "mqLVT9E1f4E=",
+  "dgSpecHash": "3wXRq0mR7QM=",
   "success": true,
   "projectFilePath": "/Users/nacl/Dev/dotnet/Simple-Bank-Manager/BankManagerApp/BankManagerApp.csproj",
   "expectedPackageFiles": [
+    "/Users/nacl/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/nacl/.nuget/packages/googlegson/2.13.1.1/googlegson.2.13.1.1.nupkg.sha512",
     "/Users/nacl/.nuget/packages/microsoft.data.sqlite.core/10.0.0/microsoft.data.sqlite.core.10.0.0.nupkg.sha512",
     "/Users/nacl/.nuget/packages/microsoft.entityframeworkcore/10.0.0/microsoft.entityframeworkcore.10.0.0.nupkg.sha512",

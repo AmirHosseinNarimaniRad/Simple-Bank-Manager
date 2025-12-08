@@ -11,10 +11,17 @@ namespace BankManager.Data.Entities
 
         public int UserId { get; set; }
 
-        public string Name { get; set; } // e.g., Cash, Card
+        public string Name { get; set; } = string.Empty;
 
         public decimal Balance { get; set; }
+        
         public DateTime CreatedAt { get; set; }
+        
         public DateTime UpdatedAt { get; set; }
+        
+        // Navigation properties
+        public User User { get; set; } = null!;
+        
+        public ICollection<TransactionDb> Transactions { get; set; } = new List<TransactionDb>();
     }
 }

@@ -51,32 +51,39 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>MonoBundle/BCrypt.Net-Next.dll</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EVufr/i5CaGgi2WzFQWOsYLAxMOnfBn81fTanaSdSmM=
+			</data>
+		</dict>
 		<key>MonoBundle/BankManager.Data.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QLBGmCX94XQgD3ewH2MxdMx/8Eliwx2yunKK2MiPJkc=
+			2lZr+XdYK2NmqgQxOXI6n62SKdXPHtnGDmm0wAoVxUU=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManager.Data.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+yWBtLRdAFMM9dDZqJ6dFUbV8fEeI/7XbRhU3+cqeL4=
+			rOaESxHziO2NVAwvAGBQWgsNfFYkoWDU3c+LjWLoJYk=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManagerApp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			A+7r2pmwb2o8r5jt5Uvu1ZrR64h0he92+SECithHqRM=
+			SnLi1o3jUbtwG6H4qzwPIhPiS4UFpDW3wz7hfrheFKI=
 			</data>
 		</dict>
 		<key>MonoBundle/BankManagerApp.pdb</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ukvE8lvI6kX1TC175KZPop1mDzCXUtv4BdYoY1Ko+zA=
+			6s9bIjTnZPs78CYZV9eOszYAnAitdEvOG2aEKAJpeao=
 			</data>
 		</dict>
 		<key>MonoBundle/BuildHost-net472/Microsoft.Build.Locator.dll</key>

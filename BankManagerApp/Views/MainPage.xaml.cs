@@ -7,16 +7,16 @@ namespace BankManagerApp.Views
     public partial class MainPage : ContentPage
     {
         private readonly DatabaseService _database;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly AuthService _authService;
         private List<Wallet>? _accounts;
 
-        public MainPage(DatabaseService database, IServiceProvider serviceProvider)
+        public MainPage(DatabaseService database)
         {
             try
             {
                 InitializeComponent();
                 _database = database;
-                _serviceProvider = serviceProvider;
+                _authService = new AuthService(database._context);
                 Console.WriteLine("MainPage: Constructor completed");
             }
             catch (Exception ex)
@@ -49,8 +49,8 @@ namespace BankManagerApp.Views
                     BudgetLabel.Text = "0 تومان";
                 }
                 
-                // Load accounts for default user
-                int userId = 1;
+                // Load accounts for current user
+                int userId = _authService.GetCurrentUserId();
                 _accounts = await _database.GetWalletsAsync(userId);
                 
                 // Update summary
@@ -169,7 +169,7 @@ namespace BankManagerApp.Views
                         var tapGesture = new TapGestureRecognizer();
                         tapGesture.Tapped += async (s, e) =>
                         {
-                            var detailPage = _serviceProvider.GetRequiredService<AccountDetailPage>();
+                            var detailPage = new AccountDetailPage(_database);
                             detailPage.AccountId = wallet.Id;
                             await Navigation.PushAsync(detailPage);
                         };
@@ -241,10 +241,11 @@ namespace BankManagerApp.Views
         {
             try
             {
-                bool answer = await DisplayAlert("خروج", "آیا می‌خواهید از برنامه خارج شوید؟", "بله", "خیر");
+                bool answer = await DisplayAlert("خروج", "آیا می‌خواهید از حساب کاربری خارج شوید؟", "بله", "خیر");
                 if (answer)
                 {
-                    Application.Current?.Quit();
+                    _authService.Logout();
+                    Application.Current!.MainPage = new NavigationPage(new LoginPage(_authService, _database));
                 }
             }
             catch (Exception ex)

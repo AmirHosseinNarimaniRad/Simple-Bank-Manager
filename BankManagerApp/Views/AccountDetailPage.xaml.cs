@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using BankManager.Data.Entities;
+using BankManager.Data.Enums;
 using BankManagerApp.Services;
 using BankManagerApp.ViewModels;
 using Microsoft.Maui.Controls.Shapes;
@@ -12,7 +13,7 @@ namespace BankManagerApp.Views
         private readonly DatabaseService _database;
         private Wallet _account;
         private ObservableCollection<TransactionDb> _transactions;
-        private string _currentTransactionType = "Deposit"; // "Deposit" or "Withdraw"
+        private TransactionType _currentTransactionType = TransactionType.Deposit;
         
         // Calendar Fields
         private System.Globalization.PersianCalendar _persianCalendar;
@@ -119,11 +120,11 @@ namespace BankManagerApp.Views
                 // Check button text to determine type
                 if (button.Text.Contains("واریز"))
                 {
-                    _currentTransactionType = "Deposit";
+                    _currentTransactionType = TransactionType.Deposit;
                 }
                 else if (button.Text.Contains("هزینه"))
                 {
-                    _currentTransactionType = "Withdraw";
+                    _currentTransactionType = TransactionType.Withdraw;
                 }
                 
                 Console.WriteLine($"Transaction type changed to: {_currentTransactionType}");
@@ -140,7 +141,7 @@ namespace BankManagerApp.Views
                 return;
             }
 
-            if (_currentTransactionType == "Deposit")
+            if (_currentTransactionType == TransactionType.Deposit)
             {
                 IncomeTab.BackgroundColor = Color.FromArgb("#E8F5E9");
                 IncomeTab.TextColor = Color.FromArgb("#2E7D32");
@@ -168,7 +169,7 @@ namespace BankManagerApp.Views
             if (decimal.TryParse(AmountEntry.Text, out decimal amount) && amount > 0)
             {
                 // Update Balance
-                if (_currentTransactionType == "Deposit")
+                if (_currentTransactionType == TransactionType.Deposit)
                     _account.Balance += amount;
                 else
                     _account.Balance -= amount;
@@ -179,9 +180,9 @@ namespace BankManagerApp.Views
                 var transaction = new TransactionDb
                 {
                     AccountId = _account.Id,
-                    Type = _currentTransactionType,  // "Deposit" or "Withdraw"
+                    Type = _currentTransactionType,
                     Category = CategoryPicker.SelectedItem?.ToString() ?? "سایر",
-                    IncomeType = _currentTransactionType == "Deposit" ? CategoryPicker.SelectedItem?.ToString() : null,
+                    IncomeType = _currentTransactionType == TransactionType.Deposit ? CategoryPicker.SelectedItem?.ToString() : null,
                     Amount = amount,
                     Description = DescriptionEntry.Text,
                     DateTime = DateTime.Now
@@ -435,44 +436,45 @@ namespace BankManagerApp.Views
 
         private void UpdateStats()
         {
-            if (_transactions == null) return;
-
-            decimal totalIncome = _transactions
-                .Where(t => !string.IsNullOrEmpty(t.Type) && 
-                           (t.Type.Trim().Equals("Income", StringComparison.OrdinalIgnoreCase) || 
-                            t.Type.Trim().Equals("Deposit", StringComparison.OrdinalIgnoreCase)))
-                .Sum(t => t.Amount);
-
-            decimal totalExpense = _transactions
-                .Where(t => !string.IsNullOrEmpty(t.Type) && 
-                           (t.Type.Trim().Equals("Expense", StringComparison.OrdinalIgnoreCase) || 
-                            t.Type.Trim().Equals("Withdraw", StringComparison.OrdinalIgnoreCase)))
-                .Sum(t => t.Amount);
-
-            MainThread.BeginInvokeOnMainThread(() =>
+            if (_transactions == null || _transactions.Count == 0)
             {
-                SelectedDateIncomeLabel.Text = $"{totalIncome:N0} تومان";
-                SelectedDateExpenseLabel.Text = $"{totalExpense:N0} تومان";
+                if (SelectedDateIncomeLabel != null) SelectedDateIncomeLabel.Text = "0 تومان";
+                if (SelectedDateExpenseLabel != null) SelectedDateExpenseLabel.Text = "0 تومان";
+                return;
+            }
 
-                // Update Summary Label
-                string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
-                if (_selectedDate.HasValue)
-                {
-                    int pYear = _persianCalendar.GetYear(_selectedDate.Value);
-                    int pMonth = _persianCalendar.GetMonth(_selectedDate.Value);
-                    int pDay = _persianCalendar.GetDayOfMonth(_selectedDate.Value);
-                    
-                    CalendarSummaryLabel.Text = $"آمار روز {pDay} {monthNames[pMonth - 1]} {pYear}";
-                }
-                else if (_isYearView)
-                {
-                    CalendarSummaryLabel.Text = $"آمار کل سال {_currentYear}";
-                }
-                else
-                {
-                    CalendarSummaryLabel.Text = $"آمار ماه {monthNames[_currentMonth - 1]} {_currentYear}";
-                }
-            });
+            var income = _transactions
+                .Where(t => t.Type == TransactionType.Deposit)
+                .Sum(t => t.Amount);
+            
+            var expense = _transactions
+                .Where(t => t.Type == TransactionType.Withdraw)
+                .Sum(t => t.Amount);
+
+            if (SelectedDateIncomeLabel != null)
+                SelectedDateIncomeLabel.Text = $"{income:N0} تومان";
+            
+            if (SelectedDateExpenseLabel != null)
+                SelectedDateExpenseLabel.Text = $"{expense:N0} تومان";
+
+            // Update CalendarSummaryLabel based on current view
+            string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
+            if (_selectedDate.HasValue)
+            {
+                int pYear = _persianCalendar.GetYear(_selectedDate.Value);
+                int pMonth = _persianCalendar.GetMonth(_selectedDate.Value);
+                int pDay = _persianCalendar.GetDayOfMonth(_selectedDate.Value);
+                
+                CalendarSummaryLabel.Text = $"آمار روز {pDay} {monthNames[pMonth - 1]} {pYear}";
+            }
+            else if (_isYearView)
+            {
+                CalendarSummaryLabel.Text = $"آمار کل سال {_currentYear}";
+            }
+            else
+            {
+                CalendarSummaryLabel.Text = $"آمار ماه {monthNames[_currentMonth - 1]} {_currentYear}";
+            }
         }
     }
 }

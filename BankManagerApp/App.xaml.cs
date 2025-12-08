@@ -1,42 +1,28 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using BankManagerApp.Converters;
+﻿using BankManagerApp.Services;
 using BankManagerApp.Views;
-using BankManagerApp.Services;
-using System;
 
-namespace BankManagerApp;
-
-public partial class App : Application
+namespace BankManagerApp
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public App(IServiceProvider serviceProvider)
+    public partial class App : Application
     {
-        InitializeComponent();
-        _serviceProvider = serviceProvider;
-    }
-
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        try
+        public App(AuthService authService, DatabaseService database)
         {
+            InitializeComponent();
+
             // Initialize database
-            var databaseService = _serviceProvider.GetRequiredService<DatabaseService>();
-            Task.Run(async () => await databaseService.Init()).Wait();
+            _ = database.Init();
 
-            // Resolve MainPage from DI
-            var mainPage = _serviceProvider.GetRequiredService<MainPage>();
-            
-            return new Window(new NavigationPage(mainPage)
+            // Check if user is logged in
+            if (authService.IsLoggedIn())
             {
-                BarBackgroundColor = Color.FromArgb("#512BD4"),
-                BarTextColor = Colors.White
-            });
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"App.CreateWindow CRASH: {ex}");
-            throw;
+                // User is logged in, go to MainPage
+                MainPage = new NavigationPage(new MainPage(database));
+            }
+            else
+            {
+                // User is not logged in, go to LoginPage
+                MainPage = new NavigationPage(new LoginPage(authService, database));
+            }
         }
     }
 }

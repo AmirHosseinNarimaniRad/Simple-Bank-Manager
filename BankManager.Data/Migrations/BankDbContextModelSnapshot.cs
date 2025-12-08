@@ -17,6 +17,37 @@ namespace BankManager.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
+            modelBuilder.Entity("BankManager.Data.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Type", "Name");
+
+                    b.ToTable("categories", (string)null);
+                });
+
             modelBuilder.Entity("BankManager.Data.Entities.TransactionDb", b =>
                 {
                     b.Property<int>("Id")
@@ -27,11 +58,16 @@ namespace BankManager.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Category")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -40,36 +76,30 @@ namespace BankManager.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IncomeType")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("transactions");
+                    b.HasIndex("AccountId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            Amount = 1000000m,
-                            Category = "حقوق",
-                            CreatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-                            DateTime = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "تست اولیه",
-                            IncomeType = "حقوق",
-                            Type = "Income",
-                            UpdatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc)
-                        });
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DateTime");
+
+                    b.HasIndex("AccountId", "DateTime");
+
+                    b.ToTable("transactions", (string)null);
                 });
 
             modelBuilder.Entity("BankManager.Data.Entities.User", b =>
@@ -81,45 +111,44 @@ namespace BankManager.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("MonthlyBudget")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiry")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PhoneNumber")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("users");
+                    b.HasIndex("Username")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-                            FirstName = "Test",
-                            LastName = "User",
-                            MonthlyBudget = 5000000m,
-                            PhoneNumber = "09123456789",
-                            UpdatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc)
-                        });
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("BankManager.Data.Entities.Wallet", b =>
@@ -129,6 +158,7 @@ namespace BankManager.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Balance")
+                        .HasPrecision(18, 2)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -136,6 +166,7 @@ namespace BankManager.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -146,18 +177,53 @@ namespace BankManager.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("bank_accounts");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Balance = 1000000m,
-                            CreatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-                            Name = "کیف پول تست",
-                            UpdatedAt = new DateTime(2025, 1, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-                            UserId = 1
-                        });
+                    b.ToTable("bank_accounts", (string)null);
+                });
+
+            modelBuilder.Entity("BankManager.Data.Entities.TransactionDb", b =>
+                {
+                    b.HasOne("BankManager.Data.Entities.Wallet", "Wallet")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BankManager.Data.Entities.Category", "CategoryEntity")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("CategoryEntity");
+
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("BankManager.Data.Entities.Wallet", b =>
+                {
+                    b.HasOne("BankManager.Data.Entities.User", "User")
+                        .WithMany("Wallets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BankManager.Data.Entities.Category", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("BankManager.Data.Entities.User", b =>
+                {
+                    b.Navigation("Wallets");
+                });
+
+            modelBuilder.Entity("BankManager.Data.Entities.Wallet", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

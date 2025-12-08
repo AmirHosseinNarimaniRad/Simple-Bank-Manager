@@ -2,77 +2,71 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BankManagerApp.Views.LoginPage"
-             Title="Login"
-             FlowDirection="LeftToRight"
-             BackgroundColor="#F5F5F5">
-
+             Title="ورود"
+             BackgroundColor="White">
+    
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="25" VerticalOptions="Center">
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
             
-            <!-- Logo/Icon -->
-            <Label Text="💰" 
-                   FontSize="80"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,20"/>
+            <!-- Logo/Title -->
+            <Label Text="🔐" FontSize="60" HorizontalOptions="Center"/>
+            <Label Text="ورود به نمکدون" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#333"/>
+            <Label Text="مدیریت هوشمند مخارج شخصی" FontSize="14" HorizontalOptions="Center" TextColor="#888" Margin="0,0,0,20"/>
             
-            <!-- Title -->
-            <Label Text="Welcome" 
-                   FontSize="32" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource Primary}"/>
+            <!-- Email/Username Input -->
+            <Border StrokeShape="RoundRectangle 10" Stroke="#DDD" StrokeThickness="1" BackgroundColor="White">
+                <Entry x:Name="EmailUsernameEntry" 
+                       Placeholder="ایمیل یا نام کاربری" 
+                       Keyboard="Email"
+                       TextColor="#333"
+                       PlaceholderColor="#999"
+                       Margin="10,5"/>
+            </Border>
             
-            <Label Text="Please enter your phone number to login" 
-                   FontSize="16"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource Gray600}"
-                   Margin="0,0,0,30"/>
-
-            <!-- Phone Number Entry -->
-            <Frame Padding="0" 
-                   CornerRadius="15" 
-                   HasShadow="False"
-                   BorderColor="{StaticResource Gray300}">
-                <Entry x:Name="PhoneEntry"
-                       Placeholder="Phone Number (e.g., 09123456789)"
-                       Keyboard="Telephone"
-                       FontSize="18"
-                       Margin="15,10"/>
-            </Frame>
-
-            <!-- Error Message -->
-            <Label x:Name="ErrorLabel"
-                   TextColor="Red"
-                   FontSize="14"
-                   HorizontalOptions="Center"
-                   IsVisible="False"/>
-
+            <!-- Password Input -->
+            <Border StrokeShape="RoundRectangle 10" Stroke="#DDD" StrokeThickness="1" BackgroundColor="White">
+                <Entry x:Name="PasswordEntry" 
+                       Placeholder="رمز عبور" 
+                       IsPassword="True"
+                       TextColor="#333"
+                       PlaceholderColor="#999"
+                       Margin="10,5"/>
+            </Border>
+            
+            <!-- Forgot Password Link -->
+            <Label Text="فراموشی رمز عبور؟" 
+                   FontSize="14" 
+                   TextColor="#512BD4" 
+                   HorizontalOptions="End"
+                   Margin="0,-10,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+            
             <!-- Login Button -->
-            <Button Text="Login"
-                    Clicked="OnLoginClicked"
-                    BackgroundColor="{StaticResource Primary}"
+            <Button x:Name="LoginButton"
+                    Text="ورود"
+                    BackgroundColor="#512BD4"
                     TextColor="White"
-                    FontSize="18"
                     FontAttributes="Bold"
-                    Padding="15"
-                    CornerRadius="15"
-                    Margin="0,20,0,0"/>
-
+                    FontSize="16"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Clicked="OnLoginClicked"
+                    Margin="0,10,0,0"/>
+            
             <!-- Register Link -->
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
-                <Label Text="Don't have an account?"
-                       FontSize="14"
-                       TextColor="{StaticResource Gray600}"/>
-                <Label Text="Register"
-                       FontSize="14"
-                       TextColor="{StaticResource Primary}"
-                       FontAttributes="Bold">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,20,0,0">
+                <Label Text="حساب کاربری ندارید؟" FontSize="14" TextColor="#666"/>
+                <Label Text="ثبت‌نام" FontSize="14" TextColor="#512BD4" FontAttributes="Bold">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnRegisterTapped"/>
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-
+            
         </VerticalStackLayout>
     </ScrollView>
+    
 </ContentPage>
