@@ -33,17 +33,42 @@
 
                     <Entry x:Name="AmountEntry" Placeholder="مبلغ (تومان)" Keyboard="Numeric" BackgroundColor="#F5F5F5" TextColor="#333"/>
                     
-                    <Picker x:Name="CategoryPicker" Title="انتخاب دسته‌بندی" BackgroundColor="#F5F5F5" TextColor="#333">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>حقوق</x:String>
-                                <x:String>واریز ریالی</x:String>
-                                <x:String>دنگ</x:String>
-                                <x:String>نقدی</x:String>
-                                <x:String>سایر</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                    <!-- Category Picker -->
+                    <Label Text="دسته‌بندی" FontSize="14" TextColor="#666" Margin="0,10,0,5"/>
+                    <Border StrokeShape="RoundRectangle 10" Stroke="#DDD" StrokeThickness="1" BackgroundColor="White">
+                        <Picker x:Name="CategoryPicker" BackgroundColor="Transparent" TextColor="#333" Margin="10,5">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>حقوق</x:String>
+                                    <x:String>واریز ریالی</x:String>
+                                    <x:String>دنگ</x:String>
+                                    <x:String>نقدی</x:String>
+                                    <x:String>سایر</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+                    
+                    <!-- Transaction Date/Time Selection -->
+                    <Label Text="تاریخ و ساعت تراکنش" FontSize="14" TextColor="#666" Margin="0,10,0,5"/>
+                    <Border StrokeShape="RoundRectangle 10" Stroke="#DDD" StrokeThickness="1" BackgroundColor="White">
+                        <Grid Padding="10" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                            <Label Grid.Column="0" Text="📅" FontSize="20" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" 
+                                   x:Name="SelectedDateLabel" 
+                                   Text="امروز" 
+                                   VerticalOptions="Center" 
+                                   TextColor="#333"/>
+                            <Button Grid.Column="2" 
+                                    Text="انتخاب" 
+                                    Clicked="OnSelectDateTimeClicked"
+                                    BackgroundColor="#E8EAF6"
+                                    TextColor="#512BD4"
+                                    CornerRadius="5"
+                                    Padding="10,5"
+                                    FontSize="12"/>
+                        </Grid>
+                    </Border>
 
                     <Entry x:Name="DescriptionEntry" Placeholder="توضیحات (اختیاری)" BackgroundColor="#F5F5F5" TextColor="#333"/>
 
@@ -127,7 +152,7 @@
                                 
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                                     <Label Text="{Binding Category}" FontAttributes="Bold" TextColor="#333"/>
-                                    <Label Text="{Binding DateTime, StringFormat='{0:yyyy/MM/dd HH:mm}'}" FontSize="12" TextColor="#888"/>
+                                    <Label Text="{Binding DateTime, Converter={StaticResource PersianDateConverter}}" FontSize="12" TextColor="#888"/>
                                 </VerticalStackLayout>
                                 
                                 <Label Grid.Column="2" Text="{Binding Amount, StringFormat='{0:N0}'}" FontAttributes="Bold" TextColor="{Binding Type, Converter={StaticResource TransactionColorConverter}}" VerticalOptions="Center"/>

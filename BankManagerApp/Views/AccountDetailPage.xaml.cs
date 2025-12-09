@@ -21,6 +21,9 @@ namespace BankManagerApp.Views
         private int _currentMonth;
         private DateTime? _selectedDate;
         private bool _isYearView = false;
+        
+        // Transaction Date/Time Selection
+        private DateTime? _selectedTransactionDateTime = null;
 
         public int AccountId
         {
@@ -185,7 +188,7 @@ namespace BankManagerApp.Views
                     IncomeType = _currentTransactionType == TransactionType.Deposit ? CategoryPicker.SelectedItem?.ToString() : null,
                     Amount = amount,
                     Description = DescriptionEntry.Text,
-                    DateTime = DateTime.Now
+                    DateTime = _selectedTransactionDateTime ?? DateTime.Now // Use selected date or current time
                 };
                 
                 await _database.SaveTransactionAsync(transaction);
@@ -194,6 +197,11 @@ namespace BankManagerApp.Views
                 UpdateBalance();
                 AmountEntry.Text = "";
                 DescriptionEntry.Text = "";
+                
+                // Reset selected date/time
+                _selectedTransactionDateTime = null;
+                SelectedDateLabel.Text = "امروز";
+                
                 await LoadTransactions();
                 
                 await DisplayAlert("موفق", "تراکنش با موفقیت ثبت شد", "باشه");
@@ -201,6 +209,41 @@ namespace BankManagerApp.Views
             else
             {
                 await DisplayAlert("خطا", "لطفاً مبلغ معتبر وارد کنید", "باشه");
+            }
+        }
+
+        private async void OnSelectDateTimeClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var dialog = new DateTimePickerDialog(_selectedTransactionDateTime);
+                await Navigation.PushModalAsync(dialog);
+                
+                // Wait for dialog to complete
+                await dialog.WaitForResultAsync();
+                
+                // Check if user selected a date
+                if (dialog.SelectedDateTime.HasValue)
+                {
+                    _selectedTransactionDateTime = dialog.SelectedDateTime.Value;
+                    
+                    // Update label with Persian date
+                    var pc = new System.Globalization.PersianCalendar();
+                    int year = pc.GetYear(_selectedTransactionDateTime.Value);
+                    int month = pc.GetMonth(_selectedTransactionDateTime.Value);
+                    int day = pc.GetDayOfMonth(_selectedTransactionDateTime.Value);
+                    string hour = _selectedTransactionDateTime.Value.Hour.ToString("00");
+                    string minute = _selectedTransactionDateTime.Value.Minute.ToString("00");
+                    
+                    string[] monthNames = { "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", 
+                                           "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند" };
+                    
+                    SelectedDateLabel.Text = $"{day} {monthNames[month - 1]} {year} - {hour}:{minute}";
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("خطا", $"خطا در انتخاب تاریخ: {ex.Message}", "باشه");
             }
         }
 
