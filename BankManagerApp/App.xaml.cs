@@ -16,7 +16,7 @@ namespace BankManagerApp
             if (authService.IsLoggedIn())
             {
                 // User is logged in, go to MainPage
-                MainPage = new NavigationPage(new MainPage(database));
+                MainPage = new NavigationPage(new MainPage(database, authService));
             }
             else
             {

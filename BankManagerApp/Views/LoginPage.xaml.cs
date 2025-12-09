@@ -35,7 +35,7 @@ namespace BankManagerApp.Views
                 if (success)
                 {
                     _authService.SaveCurrentUserId(userId);
-                    Application.Current!.MainPage = new NavigationPage(new MainPage(_database));
+                    Application.Current!.MainPage = new NavigationPage(new MainPage(_database, _authService));
                 }
                 else
                 {

@@ -10,13 +10,13 @@ namespace BankManagerApp.Views
         private readonly AuthService _authService;
         private List<Wallet>? _accounts;
 
-        public MainPage(DatabaseService database)
+        public MainPage(DatabaseService database, AuthService authService)
         {
             try
             {
                 InitializeComponent();
                 _database = database;
-                _authService = new AuthService(database._context);
+                _authService = authService;
                 Console.WriteLine("MainPage: Constructor completed");
             }
             catch (Exception ex)
@@ -201,15 +201,19 @@ namespace BankManagerApp.Views
 
                 if (!string.IsNullOrWhiteSpace(accountName))
                 {
-                    int userId = 1;
+                    // Get current user ID
+                    int userId = _authService.GetCurrentUserId();
+                    Console.WriteLine($"DEBUG: Creating wallet for userId={userId}");
                     
                     var newAccount = new Wallet
                     {
-                        UserId = userId,
                         Name = accountName,
+                        UserId = userId, // Set the current user's ID
                         Balance = 0
                         // CreatedAt and UpdatedAt will be set automatically by BankDbContext
                     };
+                    
+                    Console.WriteLine($"DEBUG: Wallet created with UserId={newAccount.UserId}");
 
                     await _database.SaveWalletAsync(newAccount);
                     

@@ -76,7 +76,7 @@ namespace BankManagerApp.Views
                     // Auto-login after registration
                     _authService.SaveCurrentUserId(userId);
                     await DisplayAlert("موفق", "ثبت‌نام با موفقیت انجام شد", "باشه");
-                    Application.Current!.MainPage = new NavigationPage(new MainPage(_database));
+                    Application.Current!.MainPage = new NavigationPage(new MainPage(_database, _authService));
                 }
                 else
                 {
