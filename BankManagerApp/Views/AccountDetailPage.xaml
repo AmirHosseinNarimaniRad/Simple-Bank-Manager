@@ -56,7 +56,7 @@
                             <Label Grid.Column="0" Text="📅" FontSize="20" VerticalOptions="Center"/>
                             <Label Grid.Column="1" 
                                    x:Name="SelectedDateLabel" 
-                                   Text="امروز" 
+                                   Text="اکنون" 
                                    VerticalOptions="Center" 
                                    TextColor="#333"/>
                             <Button Grid.Column="2" 

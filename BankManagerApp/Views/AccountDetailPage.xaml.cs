@@ -200,7 +200,7 @@ namespace BankManagerApp.Views
                 
                 // Reset selected date/time
                 _selectedTransactionDateTime = null;
-                SelectedDateLabel.Text = "امروز";
+                SelectedDateLabel.Text = "اکنون";
                 
                 await LoadTransactions();
                 
