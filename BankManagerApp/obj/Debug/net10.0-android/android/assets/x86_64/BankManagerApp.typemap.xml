@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="BankManagerApp" mvid="323cc022e43548ac80746a22b88e6aff">
+  <java-to-managed>
+    <entry java-name="crc648cad987699ad429b/MainActivity" managed-name="BankManagerApp.MainActivity, BankManagerApp" managed-type-token-id="33554440" />
+    <entry java-name="crc648cad987699ad429b/MainApplication" managed-name="BankManagerApp.MainApplication, BankManagerApp" managed-type-token-id="33554441" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc648cad987699ad429b/MainActivity" managed-name="BankManagerApp.MainActivity, BankManagerApp" managed-type-token-id="33554440" />
+    <entry java-name="crc648cad987699ad429b/MainApplication" managed-name="BankManagerApp.MainApplication, BankManagerApp" managed-type-token-id="33554441" />
+  </managed-to-java>
+</api>
