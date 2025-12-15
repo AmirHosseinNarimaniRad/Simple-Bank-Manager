@@ -57,7 +57,7 @@ namespace BankManagerApp.Views
             {
                 AccountNameLabel.Text = _account.Name;
                 UpdateBalance();
-                UpdateTransactionTypeUI(); // Set up transaction type UI
+                await UpdateTransactionTypeUIAsync(); // Set up transaction type UI
                 RenderCalendar(); // Render calendar after account is loaded
                 await LoadTransactions();
             }
@@ -132,10 +132,10 @@ namespace BankManagerApp.Views
                 
                 Console.WriteLine($"Transaction type changed to: {_currentTransactionType}");
             }
-            UpdateTransactionTypeUI();
+            _ = UpdateTransactionTypeUIAsync();
         }
 
-        private void UpdateTransactionTypeUI()
+        private async Task UpdateTransactionTypeUIAsync()
         {
             // Check if UI elements are ready
             if (IncomeTab == null || ExpenseTab == null || CategoryPicker == null)
@@ -150,8 +150,6 @@ namespace BankManagerApp.Views
                 IncomeTab.TextColor = Color.FromArgb("#2E7D32");
                 ExpenseTab.BackgroundColor = Color.FromArgb("#F5F5F5");
                 ExpenseTab.TextColor = Color.FromArgb("#666");
-                
-                CategoryPicker.ItemsSource = new string[] { "حقوق", "واریز ریالی", "دنگ", "نقدی", "سایر" };
             }
             else
             {
@@ -159,10 +157,22 @@ namespace BankManagerApp.Views
                 IncomeTab.TextColor = Color.FromArgb("#666");
                 ExpenseTab.BackgroundColor = Color.FromArgb("#FFEBEE");
                 ExpenseTab.TextColor = Color.FromArgb("#C62828");
-
-                CategoryPicker.ItemsSource = new string[] { "خوراکی", "حمل‌ونقل", "خرید", "قبض", "تفریح", "سایر","بیف لاین" };
             }
-            CategoryPicker.SelectedIndex = 0;
+
+            // Load categories from database
+            try
+            {
+                var categories = await _database.GetCategoriesAsync(_currentTransactionType);
+                CategoryPicker.ItemsSource = categories.Select(c => c.Name).ToList();
+                CategoryPicker.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading categories: {ex.Message}");
+                // Fallback if DB fails
+                CategoryPicker.ItemsSource = new string[] { "سایر" };
+                CategoryPicker.SelectedIndex = 0;
+            }
         }
 
         private async void OnSubmitTransactionClicked(object sender, EventArgs e)
