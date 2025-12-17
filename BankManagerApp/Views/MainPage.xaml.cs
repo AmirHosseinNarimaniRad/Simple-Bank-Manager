@@ -51,6 +51,17 @@ namespace BankManagerApp.Views
                 
                 // Load accounts for current user
                 int userId = _authService.GetCurrentUserId();
+                
+                // VALIDATE SESSION: Ensure user actually exists in DB (fixes ghost session issue)
+                var currentUser = await _database.GetUserAsync(userId);
+                if (currentUser == null)
+                {
+                    Console.WriteLine($"MainPage: Session invalid. UserId {userId} not found in DB. Logging out...");
+                    _authService.Logout();
+                    Application.Current.MainPage = new NavigationPage(new LoginPage(_authService, _database));
+                    return;
+                }
+
                 _accounts = await _database.GetWalletsAsync(userId);
                 
                 // Update summary
