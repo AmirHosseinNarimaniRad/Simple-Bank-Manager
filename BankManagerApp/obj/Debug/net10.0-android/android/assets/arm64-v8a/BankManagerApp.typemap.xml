@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="BankManagerApp" mvid="323cc022e43548ac80746a22b88e6aff">
+<api type="debug" assembly-name="BankManagerApp" mvid="e563e70a83b347a3b63a2e32a163dd67">
   <java-to-managed>
     <entry java-name="crc648cad987699ad429b/MainActivity" managed-name="BankManagerApp.MainActivity, BankManagerApp" managed-type-token-id="33554440" />
     <entry java-name="crc648cad987699ad429b/MainApplication" managed-name="BankManagerApp.MainApplication, BankManagerApp" managed-type-token-id="33554441" />

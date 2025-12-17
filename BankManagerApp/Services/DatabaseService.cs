@@ -15,8 +15,17 @@ namespace BankManagerApp.Services
 
         public async Task Init()
         {
-            // Ensure database is created and migrated
-            await _context.Database.MigrateAsync();
+            try
+            {
+                // Ensure database is created and migrated
+                await _context.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FATAL ERROR: Database initialization failed: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                // In a real app we might want to show a page with the error
+            }
         }
 
         // User methods
