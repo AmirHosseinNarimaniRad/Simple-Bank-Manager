@@ -26,9 +26,26 @@ public static class MauiProgram
 
 		builder.Services.AddDbContext<BankDbContext>(options =>
 		{
+			// ===== SQLite (Local Database - Current) =====
 			var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 			var dbPath = Path.Combine(folder, "bankmanager.db");
 			options.UseSqlite($"Data Source={dbPath}");
+
+			// ===== SQL Server (Remote Database - Commented) =====
+			// To use SQL Server instead of SQLite:
+			// 1. Install package: Microsoft.EntityFrameworkCore.SqlServer
+			// 2. Uncomment the line below and comment out the SQLite line above
+			// 3. Replace YOUR_SERVER_IP, YOUR_DATABASE_NAME, YOUR_USERNAME, YOUR_PASSWORD with actual values
+			// 
+			// var connectionString = "Server=YOUR_SERVER_IP,1433;Database=YOUR_DATABASE_NAME;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;Encrypt=True;";
+			// options.UseSqlServer(connectionString);
+			//
+			// Example:
+			// var connectionString = "Server=192.168.1.50,1433;Database=BankManagerDB;User Id=sa;Password=MySecretPass123;TrustServerCertificate=True;Encrypt=True;";
+			// options.UseSqlServer(connectionString);
+			//
+			// ⚠️ SECURITY WARNING: Storing passwords in code is NOT secure for production apps!
+			// Consider using environment variables or a secure configuration service.
 		});
 
 		builder.Services.AddTransient<DatabaseService>();
